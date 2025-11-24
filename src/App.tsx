@@ -1,9 +1,34 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/",
+        element: <Dashboard />,
+      },
+    ],
+    errorElement: <NotFound />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+]);
+
 function App() {
   return (
-    <div className="bg-slate-900 min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold text-white">FleetLink</h1>
+    <div className="bg-slate-900 min-h-screen text-white">
+      <RouterProvider router={router} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
+
