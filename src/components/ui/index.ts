@@ -9,3 +9,4 @@ export {
   TableHeader,
   TableRow,
 } from './table';
+export { Select } from './select';
