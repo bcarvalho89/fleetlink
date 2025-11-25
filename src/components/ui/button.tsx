@@ -5,24 +5,12 @@ import { cn } from '../../lib/utils';
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  loading?: boolean;
   size?: 'default' | 'sm' | 'lg' | 'icon';
   variant?: 'default' | 'destructive' | 'outline' | 'ghost' | 'link';
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      children,
-      className,
-      disabled,
-      loading,
-      variant = 'default',
-      size = 'default',
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, variant = 'default', size = 'default', ...props }, ref) => {
     const variants = {
       default: 'bg-primary text-primary-foreground hover:bg-primary/90',
       destructive:
@@ -49,18 +37,32 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           className,
         )}
         ref={ref}
-        disabled={loading || disabled}
         {...props}
-      >
-        <span className={cn({ 'opacity-0': loading })}>{children}</span>
-        {loading && (
-          <span className="absolute inset-0 flex items-center justify-center">
-            <Loader2 className="h-4 w-4 animate-spin" />
-          </span>
-        )}
-      </button>
+      />
     );
   },
 );
 
-export { Button };
+interface LoadingButtonProps extends ButtonProps {
+  loading?: boolean;
+}
+
+const LoadingButton = ({
+  loading,
+  children,
+  disabled,
+  ...otherProps
+}: LoadingButtonProps) => {
+  return (
+    <Button {...otherProps} disabled={loading || disabled}>
+      <span className={cn({ 'opacity-0': loading })}>{children}</span>
+      {loading && (
+        <span className="absolute inset-0 flex items-center justify-center">
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </span>
+      )}
+    </Button>
+  );
+};
+
+export { Button, LoadingButton };
