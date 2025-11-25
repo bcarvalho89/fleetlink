@@ -1,5 +1,5 @@
-// TODO: Replace with real authentication check from Zustand/Firebase
+import { useAuthStore } from '../store/auth';
+
 export const useAuth = () => {
-  const isAuthenticated = true;
-  return isAuthenticated;
+  return useAuthStore(state => state.isAuthenticated);
 };
