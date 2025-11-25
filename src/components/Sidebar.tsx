@@ -1,17 +1,26 @@
 import { signOut } from 'firebase/auth';
-import { ChevronLeft, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { LogOut, Menu } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { auth } from '@/lib/firebase';
 import { useAuthStore } from '@/store/auth';
 
 import { Button } from './ui';
+import { cn } from '@/lib/utils';
 
 interface SidebarProps {
   onSidebarToogle: () => void;
+  isOpen: boolean;
 }
 
-export function Sidebar({ onSidebarToogle }: SidebarProps) {
+const navigatiomItems = [
+  { href: '/', label: 'Dashboard' },
+  { href: '/drivers', label: 'Drivers' },
+  { href: '/trucks', label: 'Trucks' },
+  { href: '/loads', label: 'Loads' },
+];
+
+export function Sidebar({ onSidebarToogle, isOpen }: SidebarProps) {
   const { user, logout } = useAuthStore(state => state);
   const navigate = useNavigate();
 
@@ -32,22 +41,40 @@ export function Sidebar({ onSidebarToogle }: SidebarProps) {
   return (
     <aside className="flex h-full flex-col">
       <div className="flex items-center justify-between p-4">
-        <h1 className="text-lg font-bold">FleetLink</h1>
+        {isOpen && <h1 className="text-lg font-bold">FleetLink</h1>}
         <Button variant="ghost" size="icon" onClick={onSidebarToogle}>
-          <ChevronLeft className="h-6 w-6" />
+          <Menu size={24} />
         </Button>
       </div>
-      <nav className="flex-1 p-4">
+      <nav
+        className={cn(
+          'flex-1 p-4 transition-opacity duration-300',
+          isOpen ? 'opacity-100' : 'opacity-0',
+        )}
+      >
         <ul>
-          <li>
-            <a href="#" className="block rounded p-2 hover:bg-accent">
-              Home
-            </a>
-          </li>
+          {navigatiomItems.map(link => (
+            <li key={link.href}>
+              <Link
+                to={link.href}
+                className={cn(
+                  'block rounded p-2 hover:bg-accent',
+                  location.pathname === link.href && 'bg-accent font-medium',
+                )}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
-      <div className="p-4">
-        <div className="flex items-center gap-4">
+      <div className="mt-auto p-4">
+        <div
+          className={cn(
+            'flex items-center gap-4 transition-opacity duration-300',
+            isOpen ? 'opacity-100' : 'opacity-0',
+          )}
+        >
           <p className="truncate text-sm">{user?.email}</p>
         </div>
 
@@ -55,9 +82,10 @@ export function Sidebar({ onSidebarToogle }: SidebarProps) {
           onClick={handleLogout}
           variant="destructive"
           className="mt-4 w-full"
+          size={isOpen ? 'default' : 'icon'}
         >
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          <LogOut className={cn({ 'mr-2': isOpen })} size={16} />
+          {isOpen && 'Logout'}
         </Button>
       </div>
     </aside>
