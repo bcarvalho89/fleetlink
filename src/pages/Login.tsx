@@ -5,13 +5,20 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { FormField } from '@/components/FormField';
-import { LoadingButton } from '@/components/ui';
+import { Input, LoadingButton } from '@/components/ui';
 import { useAuth } from '@/hooks';
 import { auth } from '@/lib/firebase';
 import { LoginSchema } from '@/schemas/LoginSchema';
 import { useAuthStore } from '@/store/auth';
 import { User } from '@/types/User';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 
 type LoginData = yup.InferType<typeof LoginSchema>;
 
@@ -20,11 +27,7 @@ const Login = () => {
   const login = useAuthStore(state => state.login);
   const isAuthenticated = useAuth();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginData>({
+  const form = useForm<LoginData>({
     resolver: yupResolver(LoginSchema),
   });
 
@@ -60,33 +63,45 @@ const Login = () => {
       <div className="w-full max-w-md space-y-8 rounded-lg border border-input bg-card p-8 text-card-foreground shadow-md">
         <h1 className="text-2xl font-bold text-center">Login</h1>
 
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <FormField
-            name="email"
-            label="Email address"
-            type="email"
-            autoComplete="email"
-            register={register}
-            errors={errors}
-          />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email address</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            name="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            register={register}
-            errors={errors}
-          />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <LoadingButton
-            type="submit"
-            loading={isSubmitting}
-            className="w-full"
-          >
-            Sign in
-          </LoadingButton>
-        </form>
+            <LoadingButton
+              type="submit"
+              loading={form.formState.isSubmitting}
+              className="w-full"
+            >
+              Sign in
+            </LoadingButton>
+          </form>
+        </Form>
       </div>
     </div>
   );
