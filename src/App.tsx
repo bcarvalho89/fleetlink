@@ -2,7 +2,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ThemeToggle } from './components/ThemeToggle';
 import { auth } from './lib/firebase';
@@ -18,11 +17,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: (
-          <Layout>
-            <Dashboard />
-          </Layout>
-        ),
+        element: <Dashboard />,
+      },
+      {
+        path: '/drivers',
+        element: <p>Drivers Page</p>,
+      },
+      {
+        path: '/trucks',
+        element: <p>Trucks Page</p>,
+      },
+      {
+        path: '/loads',
+        element: <p>Loads Page</p>,
       },
     ],
     errorElement: <NotFound />,
