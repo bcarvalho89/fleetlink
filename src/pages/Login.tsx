@@ -6,11 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { Input, LoadingButton } from '@/components/ui';
-import { useAuth } from '@/hooks';
-import { auth } from '@/lib/firebase';
-import { LoginSchema } from '@/schemas/LoginSchema';
-import { useAuthStore } from '@/store/auth';
-import { User } from '@/types/User';
 import {
   Form,
   FormControl,
@@ -19,6 +14,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { useAuth } from '@/hooks';
+import { auth } from '@/lib/firebase';
+import { LoginSchema } from '@/schemas/LoginSchema';
+import { useAuthStore } from '@/store/auth';
+import { User } from '@/types/User';
 
 type LoginData = yup.InferType<typeof LoginSchema>;
 

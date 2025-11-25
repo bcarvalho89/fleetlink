@@ -17,6 +17,5 @@ export {
   FormItem,
   FormLabel,
   FormMessage,
-  useFormField,
 } from './form';
 export { Select } from './select';

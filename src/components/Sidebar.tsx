@@ -3,10 +3,10 @@ import { LogOut, Menu } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { auth } from '@/lib/firebase';
+import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth';
 
 import { Button } from './ui';
-import { cn } from '@/lib/utils';
 
 interface SidebarProps {
   onSidebarToogle: () => void;

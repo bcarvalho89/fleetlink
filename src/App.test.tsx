@@ -6,6 +6,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
 
 vi.mock('./hooks/useAuth');
+
+vi.mock('./lib/firebase', () => ({
+  auth: {},
+  db: {},
+}));
+
 vi.mock('./pages/Dashboard', () => ({
   default: () => <div>Dashboard</div>,
 }));
@@ -23,14 +29,14 @@ const routesConfig = [
     children: [
       {
         path: '/',
-        element: <div>Dashboard</div>,
+        element: <h1>Dashboard</h1>,
       },
     ],
-    errorElement: <div>Not Found</div>,
+    errorElement: <h1>Not Found</h1>,
   },
   {
     path: '/login',
-    element: <div>Login</div>,
+    element: <h1>Login</h1>,
   },
 ];
 
@@ -47,7 +53,9 @@ describe('App Routing', () => {
 
     render(<RouterProvider router={router} />);
 
-    expect(screen.getByText('Dashboard')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Dashboard' }),
+    ).toBeInTheDocument();
   });
 
   it('should redirect to Login for unauthenticated user on root path', () => {
@@ -58,7 +66,7 @@ describe('App Routing', () => {
 
     render(<RouterProvider router={router} />);
 
-    expect(screen.getByText('Login')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument();
   });
 
   it('should render Login page on /login path', () => {
@@ -69,7 +77,7 @@ describe('App Routing', () => {
 
     render(<RouterProvider router={router} />);
 
-    expect(screen.getByText('Login')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument();
   });
 
   it('should render Not Found for a non-existent route', () => {
@@ -79,6 +87,8 @@ describe('App Routing', () => {
 
     render(<RouterProvider router={router} />);
 
-    expect(screen.getByText('Not Found')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Not Found' }),
+    ).toBeInTheDocument();
   });
 });
