@@ -28,12 +28,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className={sidebarWrapperClasses}>
         <Sidebar onSidebarToogle={toggleSidebar} isOpen={isSidebarOpen} />
       </div>
-      <main
-        className="h-full w-full flex-1"
-        onClick={() => setIsSidebarOpen(false)}
-      >
-        {children}
-      </main>
+      <main className="h-full w-full flex-1">{children}</main>
     </div>
   );
 };

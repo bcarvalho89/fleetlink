@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import { useAuthStore } from './store/auth';
+import TrucksPage from './pages/Trucks';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/trucks',
-        element: <p>Trucks Page</p>,
+        element: <TrucksPage />,
       },
       {
         path: '/loads',
