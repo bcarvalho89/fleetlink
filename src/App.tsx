@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import { ThemeToggle } from './components/ThemeToggle';
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
@@ -25,9 +26,10 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <div className="bg-slate-900 min-h-screen text-white">
+    <>
       <RouterProvider router={router} />
-    </div>
+      <ThemeToggle />
+    </>
   );
 }
 
