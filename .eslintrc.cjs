@@ -37,4 +37,10 @@ module.exports = {
       rules: { 'prettier/prettier': ['warn', prettierOptions] },
     },
   ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+    'import/internal-regex': '^@/',
+  },
 };

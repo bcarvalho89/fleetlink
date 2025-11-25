@@ -1,7 +1,7 @@
 import { User as FirebaseUser } from 'firebase/auth';
 import { create } from 'zustand';
 
-import { User } from '../types/User';
+import { User } from '@/types/User';
 
 type AuthState = {
   isAuthenticated: boolean;

@@ -1,9 +1,11 @@
-import { ChevronLeft, LogOut } from 'lucide-react';
-import { Button } from './ui';
-import { useAuthStore } from '../store/auth';
-import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { ChevronLeft, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+
+import { auth } from '@/lib/firebase';
+import { useAuthStore } from '@/store/auth';
+
+import { Button } from './ui';
 
 interface SidebarProps {
   onSidebarToogle: () => void;

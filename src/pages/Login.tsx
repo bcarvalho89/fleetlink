@@ -5,13 +5,13 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
-import { FormField } from '../components/FormField';
-import { Button } from '../components/ui/button';
-import { useAuth } from '../hooks/useAuth';
-import { auth } from '../lib/firebase';
-import { LoginSchema } from '../schemas/LoginSchema';
-import { useAuthStore } from '../store/auth';
-import { User } from '../types/User';
+import { FormField } from '@/components/FormField';
+import { LoadingButton } from '@/components/ui';
+import { useAuth } from '@/hooks';
+import { auth } from '@/lib/firebase';
+import { LoginSchema } from '@/schemas/LoginSchema';
+import { useAuthStore } from '@/store/auth';
+import { User } from '@/types/User';
 
 type LoginData = yup.InferType<typeof LoginSchema>;
 
@@ -56,8 +56,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-full max-w-md p-8 space-y-8 bg-card-foreground text-card rounded-lg shadow-md">
+    <div className="flex h-screen items-center justify-center">
+      <div className="w-full max-w-md space-y-8 rounded-lg border border-input bg-card p-8 text-card-foreground shadow-md">
         <h1 className="text-2xl font-bold text-center">Login</h1>
 
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -79,9 +79,13 @@ const Login = () => {
             errors={errors}
           />
 
-          <Button type="submit" loading={isSubmitting} className="w-full">
+          <LoadingButton
+            type="submit"
+            loading={isSubmitting}
+            className="w-full"
+          >
             Sign in
-          </Button>
+          </LoadingButton>
         </form>
       </div>
     </div>

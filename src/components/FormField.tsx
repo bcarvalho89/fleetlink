@@ -5,8 +5,7 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 
-import { Input } from './ui/input';
-import { Label } from './ui/label';
+import { Input, Label } from './ui';
 
 interface FormFieldProps<T extends FieldValues> {
   autoComplete?: string;

@@ -7,6 +7,13 @@
     "skipLibCheck": true,
     "types": ["vite/client", "vitest/globals"],
 
+    /* Paths */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/ui": ["src/components/ui/*"]
+    },
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

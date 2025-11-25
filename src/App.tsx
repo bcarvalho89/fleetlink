@@ -4,12 +4,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ThemeToggle } from './components/ThemeToggle';
 import { auth } from './lib/firebase';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import { useAuthStore } from './store/auth';
-import { ThemeToggle } from './components/ThemeToggle';
 
 const router = createBrowserRouter([
   {
