@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from './ui';
+import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') ?? 'light');
@@ -19,6 +20,8 @@ export function ThemeToggle() {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+  const Icon = theme === 'light' ? Sun : Moon;
+
   return (
     <Button
       onClick={toggleTheme}
@@ -26,8 +29,9 @@ export function ThemeToggle() {
       aria-label="Toggle theme"
       type="button"
       size="icon"
+      title={`Change to ${theme === 'light' ? 'dark' : 'light'} theme`}
     >
-      {theme === 'light' ? '🌙' : '☀️'}
+      <Icon size={22} />
     </Button>
   );
 }
