@@ -1,8 +1,9 @@
-import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+
+import { Button } from '../components/ui';
 import { auth } from '../lib/firebase';
 import { useAuthStore } from '../store/auth';
-import { Button } from '../components/ui';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -13,9 +14,13 @@ const Dashboard = () => {
       await signOut(auth);
       logout();
       navigate('/login');
-    } catch (error: any) {
+    } catch (error) {
       // TODO Create a toast component for feedbacks
-      alert(error.message);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('An unexpected error occurred during logout.');
+      }
     }
   };
 

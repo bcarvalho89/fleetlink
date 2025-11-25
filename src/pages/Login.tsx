@@ -1,15 +1,19 @@
-import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+
+import { FormField } from '../components/FormField';
+import { Button } from '../components/ui/button';
+import { useAuth } from '../hooks/useAuth';
 import { auth } from '../lib/firebase';
+import { LoginSchema } from '../schemas/LoginSchema';
 import { useAuthStore } from '../store/auth';
 import { User } from '../types/User';
-import { Button } from '../components/ui/button';
-import { LoginSchema } from '../schemas/LoginSchema';
-import { FormField } from '../components/FormField';
-import { useEffect } from 'react';
-import { useAuth } from '../hooks/useAuth';
+
+type LoginData = yup.InferType<typeof LoginSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,7 +24,7 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<LoginData>({
     resolver: yupResolver(LoginSchema),
   });
 
@@ -30,7 +34,7 @@ const Login = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: LoginData) => {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -41,9 +45,13 @@ const Login = () => {
       const userPayload: User = { uid: user.uid, email: user.email };
       login(userPayload);
       navigate('/');
-    } catch (error: any) {
+    } catch (error) {
       // TODO Create a toast component for feedbacks
-      alert(error.message);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('An unexpected error occurred during login.');
+      }
     }
   };
 

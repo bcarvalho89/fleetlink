@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Button } from './ui';
 import { Moon, Sun } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+import { Button } from './ui';
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') ?? 'light');

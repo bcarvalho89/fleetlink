@@ -1,14 +1,14 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './lib/firebase';
-import { useAuthStore } from './store/auth';
+import { useEffect, useState } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { ThemeToggle } from './components/ThemeToggle';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ThemeToggle } from './components/ThemeToggle';
+import { auth } from './lib/firebase';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import { useAuthStore } from './store/auth';
 
 const router = createBrowserRouter([
   {

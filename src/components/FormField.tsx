@@ -1,18 +1,24 @@
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
-import { Label } from './ui/label';
-import { Input } from './ui/input';
+import {
+  FieldErrors,
+  FieldValues,
+  Path,
+  UseFormRegister,
+} from 'react-hook-form';
 
-interface FormFieldProps {
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+
+interface FormFieldProps<T extends FieldValues> {
   autoComplete?: string;
   className?: string;
-  errors: FieldErrors;
+  errors: FieldErrors<T>;
   label: string;
-  name: string;
-  register: UseFormRegister<any>;
+  name: Path<T>;
+  register: UseFormRegister<T>;
   type?: 'text' | 'email' | 'password';
 }
 
-export const FormField = ({
+export const FormField = <T extends FieldValues>({
   autoComplete,
   className,
   errors,
@@ -20,7 +26,7 @@ export const FormField = ({
   name,
   register,
   type = 'text',
-}: FormFieldProps) => {
+}: FormFieldProps<T>) => {
   const error = errors[name];
 
   return (
