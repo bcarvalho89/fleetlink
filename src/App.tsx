@@ -1,23 +1,24 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
-import NotFound from "./pages/NotFound";
-import ProtectedRoute from "./components/ProtectedRoute";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import NotFound from './pages/NotFound';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <ProtectedRoute />,
     children: [
       {
-        path: "/",
+        path: '/',
         element: <Dashboard />,
       },
     ],
     errorElement: <NotFound />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
 ]);
@@ -31,4 +32,3 @@ function App() {
 }
 
 export default App;
-
