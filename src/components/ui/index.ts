@@ -19,3 +19,4 @@ export {
   FormMessage,
 } from './form';
 export { Select } from './select';
+export { Dialog } from './dialog';
