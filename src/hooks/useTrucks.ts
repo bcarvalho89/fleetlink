@@ -1,5 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import { collection, getDocs } from 'firebase/firestore';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  collection,
+  doc,
+  getDocs,
+  addDoc,
+  updateDoc,
+} from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
 import { Truck } from '@/types';
@@ -29,4 +35,25 @@ export function useTrucks() {
       });
     },
   });
+}
+
+export function useTruckMutations() {
+  const queryClient = useQueryClient();
+
+  const addTruck = useMutation({
+    mutationFn: async (newTruck: Omit<Truck, 'id'>) => {
+      return addDoc(collection(db, COLLECTION), newTruck);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['trucks'] }),
+  });
+
+  const updateTruck = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<Truck> }) => {
+      const docRef = doc(db, COLLECTION, id);
+      return updateDoc(docRef, data);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['trucks'] }),
+  });
+
+  return { addTruck, updateTruck };
 }

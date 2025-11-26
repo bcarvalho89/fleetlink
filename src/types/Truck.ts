@@ -11,6 +11,6 @@ export interface Truck {
   year: number;
   status: TruckStatus;
   driverId: string | null;
-  docUrl: string | null;
+  docUrl: string;
   driverName?: string;
 }
