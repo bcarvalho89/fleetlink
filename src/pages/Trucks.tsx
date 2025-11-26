@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Plus } from 'lucide-react';
+import { Plus, SquarePen, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -31,13 +31,21 @@ type TruckData = yup.InferType<typeof TruckSchema>;
 export default function TrucksPage() {
   const [isTruckFormOpen, setIsTruckFormOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [editingTruckId, setEditingTruckId] = useState<string | null>(null);
+  const [truckToDelete, setTruckToDelete] = useState<string | null>(null);
 
   const { data: trucks, isLoading } = useTrucks();
-  const { addTruck } = useTruckMutations();
+  const { addTruck, updateTruck, deleteTruck } = useTruckMutations();
 
   const form = useForm({
     resolver: yupResolver(TruckSchema),
   });
+
+  const handleClose = () => {
+    form.reset({});
+    setEditingTruckId(null);
+    setIsTruckFormOpen(false);
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -58,16 +66,43 @@ export default function TrucksPage() {
 
   const onSubmit = async (data: TruckData) => {
     try {
-      await addTruck.mutateAsync({
-        driverId: null,
-        ...data,
-      });
-      form.reset();
-      setIsTruckFormOpen(false);
-      alert('Truck added successfully!');
+      if (editingTruckId) {
+        await updateTruck.mutateAsync({ id: editingTruckId, data });
+        alert('Truck updated successfully!');
+      } else {
+        await addTruck.mutateAsync({
+          driverId: null,
+          ...data,
+        });
+        alert('Truck added successfully!');
+      }
+      handleClose();
     } catch (error) {
       console.error(error);
+      alert(`Failed to ${editingTruckId ? 'update' : 'add'} truck.`);
     }
+  };
+
+  const handleOnDelete = async () => {
+    if (!truckToDelete) return;
+
+    try {
+      await deleteTruck.mutateAsync(truckToDelete);
+      alert('Truck deleted successfully!');
+      setTruckToDelete(null);
+    } catch (error) {
+      console.error('Failed to delete truck:', error);
+      alert('Failed to delete truck.');
+    }
+  };
+
+  const handleOnEdit = (id: string) => {
+    const truck = trucks?.find(t => t.id === id);
+    if (!truck) return;
+
+    setEditingTruckId(id);
+    form.reset(truck);
+    setIsTruckFormOpen(true);
   };
 
   const isSubmitting = form.formState.isSubmitting || uploading;
@@ -78,7 +113,13 @@ export default function TrucksPage() {
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Trucks</h1>
-        <Button onClick={() => setIsTruckFormOpen(true)}>
+        <Button
+          onClick={() => {
+            setEditingTruckId(null);
+            form.reset({});
+            setIsTruckFormOpen(true);
+          }}
+        >
           <Plus className="mr-2" size={16} />
           New Truck
         </Button>
@@ -86,8 +127,8 @@ export default function TrucksPage() {
 
       <Dialog
         isOpen={isTruckFormOpen}
-        onClose={() => setIsTruckFormOpen(false)}
-        title="Register Truck"
+        onClose={handleClose}
+        title={editingTruckId ? 'Edit Truck' : 'Register Truck'}
       >
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -178,7 +219,7 @@ export default function TrucksPage() {
                     <FormControl>
                       <Input
                         type="file"
-                        accept=".pdf,.jpg,.png"
+                        accept=".pdf,.jpg,.jpeg,.png"
                         onChange={handleFileUpload}
                       />
                       {uploading && (
@@ -206,6 +247,29 @@ export default function TrucksPage() {
         </Form>
       </Dialog>
 
+      <Dialog
+        isOpen={!!truckToDelete}
+        onClose={() => setTruckToDelete(null)}
+        title="Confirm Deletion"
+      >
+        <p>
+          Are you sure you want to delete this truck? This action cannot be
+          undone.
+        </p>
+        <div className="flex justify-end space-x-2 pt-4">
+          <Button variant="outline" onClick={() => setTruckToDelete(null)}>
+            Cancel
+          </Button>
+          <LoadingButton
+            variant="destructive"
+            onClick={handleOnDelete}
+            loading={deleteTruck.isPending}
+          >
+            Delete
+          </LoadingButton>
+        </div>
+      </Dialog>
+
       <div className="rounded-md border border-border">
         <Table>
           <TableHeader>
@@ -214,6 +278,7 @@ export default function TrucksPage() {
               <TableHead>Model</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Driver</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -246,6 +311,24 @@ export default function TrucksPage() {
                     ) : (
                       <span className="text-muted-foreground">-</span>
                     )}
+                  </TableCell>
+                  <TableCell className="space-x-2 text-right">
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      title="Edit"
+                      onClick={() => handleOnEdit(truck.id)}
+                    >
+                      <SquarePen size={16} />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      title="Remove"
+                      onClick={() => setTruckToDelete(truck.id)}
+                    >
+                      <Trash2 size={16} />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))

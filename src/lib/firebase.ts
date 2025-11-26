@@ -18,5 +18,12 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 
 // We will mock the storage functionality since is paid.
-const getStorage = () => {};
-export const storage = getStorage();
+export const storage = async (file: File): Promise<string> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const fakeUrl = `https://fake-storage.firebase.com/uploads/${Date.now()}-${file.name}`;
+
+      resolve(fakeUrl);
+    }, 1500);
+  });
+};

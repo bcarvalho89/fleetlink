@@ -5,6 +5,10 @@ import {
   getDocs,
   addDoc,
   updateDoc,
+  deleteDoc,
+  getDoc,
+  query,
+  where,
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
@@ -50,10 +54,36 @@ export function useTruckMutations() {
   const updateTruck = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<Truck> }) => {
       const docRef = doc(db, COLLECTION, id);
+
+      delete data.driverName;
+
       return updateDoc(docRef, data);
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['trucks'] }),
   });
 
-  return { addTruck, updateTruck };
+  const deleteTruck = useMutation({
+    mutationFn: async (id: string) => {
+      const docRef = doc(db, COLLECTION, id);
+
+      const truckDoc = await getDoc(docRef);
+      if (truckDoc.exists()) {
+        const truckData = truckDoc.data() as Truck;
+        if (truckData.docUrl) {
+          // do anything since we are mocking the storage
+        }
+
+        if (truckData.driverId) {
+          throw new Error(
+            'You cannot delete a truck that is linked to a driver.',
+          );
+        }
+      }
+
+      return deleteDoc(docRef);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['trucks'] }),
+  });
+
+  return { addTruck, updateTruck, deleteTruck };
 }
