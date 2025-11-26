@@ -41,6 +41,20 @@ export function useTrucks() {
   });
 }
 
+export function useAvailableTrucks() {
+  return useQuery({
+    queryKey: ['trucks', 'available'],
+    queryFn: async () => {
+      const q = query(
+        collection(db, COLLECTION),
+        where('driverId', '==', null),
+      );
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Truck);
+    },
+  });
+}
+
 export function useTruckMutations() {
   const queryClient = useQueryClient();
 

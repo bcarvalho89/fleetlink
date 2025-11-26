@@ -121,7 +121,7 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <p
       id={formDescriptionId}
-      className={cn('text-xs leading-5 text-stone-500 mt-1.5', className)}
+      className={cn('text-xs text-muted-foreground mt-1', className)}
       {...props}
     />
   );

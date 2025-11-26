@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { ThemeToggle } from './components/ThemeToggle';
 import { auth } from './lib/firebase';
 import Dashboard from './pages/Dashboard';
+import DriversPage from './pages/Drivers';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import TrucksPage from './pages/Trucks';
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/drivers',
-        element: <p>Drivers Page</p>,
+        element: <DriversPage />,
       },
       {
         path: '/trucks',

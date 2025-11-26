@@ -325,6 +325,7 @@ export default function TrucksPage() {
                       size="icon"
                       variant="destructive"
                       title="Remove"
+                      disabled={!!truck.driverId}
                       onClick={() => setTruckToDelete(truck.id)}
                     >
                       <Trash2 size={16} />
