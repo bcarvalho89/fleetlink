@@ -75,8 +75,14 @@ export default function LoadsPage() {
     }
   };
 
-  const handleStatusChange = (id: string, newStatus: string) => {
-    updateStatus.mutate({ id, status: newStatus });
+  const handleStatusChange = async (id: string, newStatus: LoadStatus) => {
+    try {
+      await updateStatus.mutateAsync({ id, status: newStatus });
+      alert('Load status changed to ' + LoadStatusLabelMap[newStatus]);
+    } catch (error) {
+      alert('Failed to create load.');
+      console.error(error);
+    }
   };
 
   const hasNoTrucksAvaliable = activeTrucks?.length === 0;
@@ -243,7 +249,10 @@ export default function LoadsPage() {
                       value={load.status}
                       onClick={e => e.stopPropagation()}
                       onChange={e =>
-                        handleStatusChange(load.id, e.target.value)
+                        handleStatusChange(
+                          load.id,
+                          e.target.value as LoadStatus,
+                        )
                       }
                       className="h-8 text-xs"
                     >
