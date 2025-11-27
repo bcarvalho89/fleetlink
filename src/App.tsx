@@ -8,10 +8,10 @@ import { DriversPage } from './features/drivers';
 import { LoadsPage } from './features/loads';
 import { TrucksPage } from './features/trucks';
 import { auth } from './lib/firebase';
-import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import { useAuthStore } from './store/auth';
+import { DashboardPage } from './features/dashboard';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Dashboard />,
+        element: <DashboardPage />,
       },
       {
         path: '/drivers',
