@@ -4,14 +4,14 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import { ThemeToggle } from './components/ThemeToggle';
+import { DriversPage } from './features/drivers';
+import { TrucksPage } from './features/trucks';
 import { auth } from './lib/firebase';
 import Dashboard from './pages/Dashboard';
-import DriversPage from './pages/Drivers';
 import LoadsPage from './pages/Loads';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import { useAuthStore } from './store/auth';
-import { TrucksPage } from './features/trucks';
 
 const router = createBrowserRouter([
   {

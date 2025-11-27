@@ -23,11 +23,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { TruckStatus, useTrucks } from '@/features/trucks';
 import { useLoads, useLoadMutations } from '@/hooks/useLoads';
 import { cn } from '@/lib/utils';
 import { LoadSchema } from '@/schemas/LoadSchema';
 import { Load, LoadStatus, LoadStatusLabelMap } from '@/types';
-import { TruckStatus, useTrucks } from '@/features/trucks';
 
 type LoadData = yup.InferType<typeof LoadSchema>;
 

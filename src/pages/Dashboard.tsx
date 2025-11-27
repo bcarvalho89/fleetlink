@@ -17,11 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useDrivers } from '@/hooks/useDrivers';
+import { useDrivers } from '@/features/drivers';
+import { TruckStatus, useTrucks } from '@/features/trucks';
 import { useLoads } from '@/hooks/useLoads';
 import { cn } from '@/lib/utils';
 import { LoadStatus, LoadStatusLabelMap } from '@/types';
-import { TruckStatus, useTrucks } from '@/features/trucks';
 
 export default function Dashboard() {
   const navigate = useNavigate();

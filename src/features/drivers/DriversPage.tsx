@@ -22,10 +22,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useDrivers, useDriverMutations } from '@/hooks/useDrivers';
-import { DriverSchema } from '@/schemas/DriverSchema';
-import { Driver } from '@/types';
 import { useAvailableTrucks, useTrucks } from '@/features/trucks';
+
+import { useDriverMutations, useDrivers } from './hooks/useDrivers';
+import { DriverSchema } from './schemas/DriverSchema';
+import { Driver } from './types/Driver';
 
 type DriverData = yup.InferType<typeof DriverSchema>;
 

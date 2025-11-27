@@ -23,8 +23,9 @@ import {
 } from '@/components/ui/table';
 import { storage } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
-import { TruckSchema } from './schemas/TruckSchema';
+
 import { useTruckMutations, useTrucks } from './hooks/useTrucks';
+import { TruckSchema } from './schemas/TruckSchema';
 import { TruckStatus, truckStatusLabelMap } from './types/Truck';
 
 type TruckData = yup.InferType<typeof TruckSchema>;
