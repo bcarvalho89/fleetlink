@@ -14,11 +14,11 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useAuth } from '@/hooks';
 import { auth } from '@/lib/firebase';
-import { LoginSchema } from '@/schemas/LoginSchema';
-import { useAuthStore } from '@/store/auth';
-import { User } from '@/types/User';
+import { LoginSchema } from './schema/LoginSchema';
+import { useAuthStore } from './store/authStore';
+import { User } from './types/User';
+import { useAuth } from './hooks/useAuth';
 
 type LoginData = yup.InferType<typeof LoginSchema>;
 

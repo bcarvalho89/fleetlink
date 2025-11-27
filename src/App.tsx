@@ -8,10 +8,9 @@ import { DriversPage } from './features/drivers';
 import { LoadsPage } from './features/loads';
 import { TrucksPage } from './features/trucks';
 import { auth } from './lib/firebase';
-import Login from './pages/Login';
 import NotFound from './pages/NotFound';
-import { useAuthStore } from './store/auth';
 import { DashboardPage } from './features/dashboard';
+import { LoginPage, useAuthStore } from './features/auth';
 
 const router = createBrowserRouter([
   {
@@ -39,7 +38,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login />,
+    element: <LoginPage />,
   },
 ]);
 
