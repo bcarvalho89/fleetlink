@@ -23,9 +23,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useDrivers, useDriverMutations } from '@/hooks/useDrivers';
-import { useAvailableTrucks, useTrucks } from '@/hooks/useTrucks';
 import { DriverSchema } from '@/schemas/DriverSchema';
 import { Driver } from '@/types';
+import { useAvailableTrucks, useTrucks } from '@/features/trucks';
 
 type DriverData = yup.InferType<typeof DriverSchema>;
 

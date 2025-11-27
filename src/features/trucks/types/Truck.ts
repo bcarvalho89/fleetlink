@@ -3,7 +3,7 @@ export enum TruckStatus {
   MAINTENANCE = 'maintenance',
 }
 
-export const TruckStatusLabelMap: Record<TruckStatus, string> = {
+export const truckStatusLabelMap: Record<TruckStatus, string> = {
   [TruckStatus.ACTIVE]: 'Active',
   [TruckStatus.MAINTENANCE]: 'Maintenance',
 };

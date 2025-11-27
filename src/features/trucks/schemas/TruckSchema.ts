@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { TruckStatus } from '@/types';
+import { TruckStatus } from '../types/Truck';
 
 export const TruckSchema = yup.object().shape({
   plate: yup.string().required('License plate is required'),

@@ -19,9 +19,9 @@ import {
 } from '@/components/ui/table';
 import { useDrivers } from '@/hooks/useDrivers';
 import { useLoads } from '@/hooks/useLoads';
-import { useTrucks } from '@/hooks/useTrucks';
 import { cn } from '@/lib/utils';
-import { LoadStatus, LoadStatusLabelMap, TruckStatus } from '@/types';
+import { LoadStatus, LoadStatusLabelMap } from '@/types';
+import { TruckStatus, useTrucks } from '@/features/trucks';
 
 export default function Dashboard() {
   const navigate = useNavigate();

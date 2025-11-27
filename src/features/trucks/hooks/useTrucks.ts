@@ -12,7 +12,8 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
-import { Truck } from '@/types';
+
+import { Truck } from '../types/Truck';
 
 const COLLECTION = 'trucks';
 

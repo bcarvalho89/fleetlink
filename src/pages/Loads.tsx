@@ -24,10 +24,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useLoads, useLoadMutations } from '@/hooks/useLoads';
-import { useTrucks } from '@/hooks/useTrucks';
 import { cn } from '@/lib/utils';
 import { LoadSchema } from '@/schemas/LoadSchema';
-import { Load, LoadStatus, LoadStatusLabelMap, TruckStatus } from '@/types';
+import { Load, LoadStatus, LoadStatusLabelMap } from '@/types';
+import { TruckStatus, useTrucks } from '@/features/trucks';
 
 type LoadData = yup.InferType<typeof LoadSchema>;
 

@@ -21,11 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useTrucks, useTruckMutations } from '@/hooks/useTrucks';
 import { storage } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
-import { TruckSchema } from '@/schemas/TruckSchema';
-import { TruckStatus, TruckStatusLabelMap } from '@/types';
+import { TruckSchema } from './schemas/TruckSchema';
+import { useTruckMutations, useTrucks } from './hooks/useTrucks';
+import { TruckStatus, truckStatusLabelMap } from './types/Truck';
 
 type TruckData = yup.InferType<typeof TruckSchema>;
 
@@ -204,7 +204,7 @@ export default function TrucksPage() {
                       <Select {...field}>
                         {Object.values(TruckStatus).map(value => (
                           <option key={value} value={value}>
-                            {TruckStatusLabelMap[value]}
+                            {truckStatusLabelMap[value]}
                           </option>
                         ))}
                       </Select>
@@ -306,7 +306,7 @@ export default function TrucksPage() {
                           : 'bg-red-100 text-red-800',
                       )}
                     >
-                      {TruckStatusLabelMap[truck.status]}
+                      {truckStatusLabelMap[truck.status]}
                     </span>
                   </TableCell>
                   <TableCell>

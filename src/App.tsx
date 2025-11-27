@@ -10,8 +10,8 @@ import DriversPage from './pages/Drivers';
 import LoadsPage from './pages/Loads';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
-import TrucksPage from './pages/Trucks';
 import { useAuthStore } from './store/auth';
+import { TrucksPage } from './features/trucks';
 
 const router = createBrowserRouter([
   {
