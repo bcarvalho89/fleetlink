@@ -1,11 +1,13 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   collection,
-  getDocs,
   addDoc,
   doc,
   updateDoc,
+  query,
+  onSnapshot,
 } from 'firebase/firestore';
+import { useEffect } from 'react';
 import * as yup from 'yup';
 
 import { db } from '@/lib/firebase';
@@ -16,12 +18,28 @@ import { Load, LoadStatus } from '../types/Load';
 const COLLECTION = 'loads';
 
 export function useLoads() {
-  return useQuery({
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const q = query(collection(db, COLLECTION));
+
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const loads = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Load[];
+
+      queryClient.setQueryData(['loads'], loads);
+    });
+
+    return () => unsubscribe();
+  }, [queryClient]);
+
+  return useQuery<Load[]>({
     queryKey: ['loads'],
-    queryFn: async () => {
-      const snapshot = await getDocs(collection(db, COLLECTION));
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Load);
-    },
+    queryFn: () => [],
+    enabled: false,
+    initialData: [],
   });
 }
 

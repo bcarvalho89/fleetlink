@@ -1,12 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   collection,
-  getDocs,
   doc,
   writeBatch,
   getDoc,
   deleteDoc,
+  query,
+  onSnapshot,
 } from 'firebase/firestore';
+import { useEffect } from 'react';
 
 import { db } from '@/lib/firebase';
 
@@ -15,14 +17,28 @@ import { Driver } from '../types/Driver';
 const COLLECTION = 'drivers';
 
 export function useDrivers() {
-  return useQuery({
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const q = query(collection(db, COLLECTION));
+
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const drivers = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Driver[];
+
+      queryClient.setQueryData(['drivers'], drivers);
+    });
+
+    return () => unsubscribe();
+  }, [queryClient]);
+
+  return useQuery<Driver[]>({
     queryKey: ['drivers'],
-    queryFn: async () => {
-      const snapshot = await getDocs(collection(db, COLLECTION));
-      return snapshot.docs.map(
-        doc => ({ id: doc.id, ...doc.data() }) as Driver,
-      );
-    },
+    queryFn: () => [],
+    enabled: false,
+    initialData: [],
   });
 }
 

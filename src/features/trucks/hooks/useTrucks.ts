@@ -9,11 +9,13 @@ import {
   getDoc,
   query,
   where,
+  onSnapshot,
 } from 'firebase/firestore';
+import { useEffect } from 'react';
 
 import { db } from '@/lib/firebase';
 
-import { Truck } from '../types/Truck';
+import { Truck, TruckStatus } from '../types/Truck';
 
 const COLLECTION = 'trucks';
 
@@ -43,16 +45,32 @@ export function useTrucks() {
 }
 
 export function useAvailableTrucks() {
-  return useQuery({
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const q = query(
+      collection(db, COLLECTION),
+      where('driverId', '==', null),
+      where('status', '==', TruckStatus.ACTIVE),
+    );
+
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const trucks = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Truck[];
+
+      queryClient.setQueryData(['trucks', 'available'], trucks);
+    });
+
+    return () => unsubscribe();
+  }, [queryClient]);
+
+  return useQuery<Truck[]>({
     queryKey: ['trucks', 'available'],
-    queryFn: async () => {
-      const q = query(
-        collection(db, COLLECTION),
-        where('driverId', '==', null),
-      );
-      const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }) as Truck);
-    },
+    queryFn: () => [],
+    enabled: false,
+    initialData: [],
   });
 }
 

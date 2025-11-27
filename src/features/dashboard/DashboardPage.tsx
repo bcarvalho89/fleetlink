@@ -19,14 +19,14 @@ import {
 } from '@/components/ui/table';
 import { useDrivers } from '@/features/drivers';
 import { LoadStatus, loadStatusLabelMap, useLoads } from '@/features/loads';
-import { TruckStatus, useTrucks } from '@/features/trucks';
+import { useAvailableTrucks } from '@/features/trucks';
 import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
   const { data: loads } = useLoads();
-  const { data: trucks } = useTrucks();
+  const { data: trucks } = useAvailableTrucks();
   const { data: drivers } = useDrivers();
 
   const plannedLoads =
@@ -36,9 +36,7 @@ export default function Dashboard() {
   const deliveredLoads =
     loads?.filter(l => l.status === LoadStatus.DELIVERED).length || 0;
 
-  const availableTrucks =
-    trucks?.filter(t => t.status === TruckStatus.ACTIVE && !t.driverId)
-      .length || 0;
+  const availableTrucks = trucks?.length || 0;
   const totalDrivers = drivers?.length || 0;
 
   const recentLoads = loads
