@@ -1,41 +1,24 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Plus, SquarePen, Trash2 } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 
-import { Button, Dialog, Input, LoadingButton, Select } from '@/components/ui';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Button } from '@/components/ui';
 import { useAvailableTrucks, useTrucks } from '@/features/trucks';
 
+import { DeleteDriverDialog } from './components/DeleteDriverDialog';
+import { DriverData, DriverFormDialog } from './components/DriverFormDialog';
+import { DriversTable } from './components/DriversTable';
 import { useDriverMutations, useDrivers } from './hooks/useDrivers';
 import { DriverSchema } from './schemas/DriverSchema';
 import { Driver } from './types/Driver';
 
-type DriverData = yup.InferType<typeof DriverSchema>;
-
 export default function DriversPage() {
-  const [isDriverFormOpen, setIsDriverFormOpen] = useState(false);
+  const [isDriverFormDialogOpen, setIsDriverFormDialogOpen] = useState(false);
   const [editingDriverId, setEditingDriverId] = useState<string | null>(null);
   const [driverToDelete, setDriverToDelete] = useState<string | null>(null);
 
-  const { data: drivers, isLoading } = useDrivers();
+  const { data: drivers } = useDrivers();
   const { data: availableTrucks } = useAvailableTrucks();
   const { data: allTrucks } = useTrucks();
 
@@ -66,7 +49,7 @@ export default function DriversPage() {
   const handleClose = () => {
     form.reset({});
     setEditingDriverId(null);
-    setIsDriverFormOpen(false);
+    setIsDriverFormDialogOpen(false);
   };
 
   const onSubmit = async (data: DriverData) => {
@@ -99,7 +82,7 @@ export default function DriversPage() {
   const handleOnEdit = (driver: Driver) => {
     setEditingDriverId(driver.id);
     form.reset(driver);
-    setIsDriverFormOpen(true);
+    setIsDriverFormDialogOpen(true);
   };
 
   const handleOnDelete = async () => {
@@ -114,8 +97,6 @@ export default function DriversPage() {
     }
   };
 
-  if (isLoading) return <div className="p-8">Loading drivers...</div>;
-
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
@@ -124,7 +105,7 @@ export default function DriversPage() {
           onClick={() => {
             setEditingDriverId(null);
             form.reset({});
-            setIsDriverFormOpen(true);
+            setIsDriverFormDialogOpen(true);
           }}
         >
           <Plus className="mr-2" size={16} />
@@ -132,174 +113,28 @@ export default function DriversPage() {
         </Button>
       </div>
 
-      <Dialog
-        isOpen={isDriverFormOpen}
+      <DriverFormDialog
+        isOpen={isDriverFormDialogOpen}
         onClose={handleClose}
-        title={editingDriverId ? 'Edit Driver' : 'Register Driver'}
-      >
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="John Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        onSubmit={onSubmit}
+        editingDriverId={editingDriverId}
+        form={form}
+        truckOptions={truckOptions}
+      />
 
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input placeholder="(55) 99999-9999" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="cnh"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>CNH (License)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="12345678900" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="truckId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Link to Truck (Optional)</FormLabel>
-                    <FormControl>
-                      <Select {...field} value={field.value || ''}>
-                        <option value="">No truck assigned</option>
-                        {truckOptions.map(truck => (
-                          <option key={truck.id} value={truck.id}>
-                            {truck.model} - {truck.plate}
-                          </option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <FormDescription>
-                      Only trucks without drivers are shown.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex justify-end pt-4">
-              <LoadingButton
-                type="submit"
-                loading={form.formState.isSubmitting}
-              >
-                Save Driver
-              </LoadingButton>
-            </div>
-          </form>
-        </Form>
-      </Dialog>
-
-      <Dialog
+      <DeleteDriverDialog
+        isDeleting={deleteDriver.isPending}
+        onDelete={handleOnDelete}
         isOpen={!!driverToDelete}
         onClose={() => setDriverToDelete(null)}
-        title="Confirm Deletion"
-      >
-        <p>
-          Are you sure you want to delete this driver? This action cannot be
-          undone.
-        </p>
-        <div className="flex justify-end space-x-2 pt-4">
-          <Button variant="outline" onClick={() => setDriverToDelete(null)}>
-            Cancel
-          </Button>
-          <LoadingButton
-            variant="destructive"
-            onClick={handleOnDelete}
-            loading={deleteDriver.isPending}
-          >
-            Delete
-          </LoadingButton>
-        </div>
-      </Dialog>
+      />
 
-      <div className="rounded-md border border-border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>CNH</TableHead>
-              <TableHead>Truck</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {drivers?.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className="text-center h-24">
-                  No drivers found.
-                </TableCell>
-              </TableRow>
-            ) : (
-              drivers?.map(driver => {
-                const truck = allTrucks?.find(
-                  truck => truck.id === driver.truckId,
-                );
-
-                return (
-                  <TableRow key={driver.id}>
-                    <TableCell className="font-medium">{driver.name}</TableCell>
-                    <TableCell>{driver.phone}</TableCell>
-                    <TableCell>{driver.cnh}</TableCell>
-                    <TableCell>
-                      {truck ? `${truck.plate} / ${truck.model}` : '-'}
-                    </TableCell>
-                    <TableCell className="space-x-2 text-right">
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        title="Edit"
-                        onClick={() => handleOnEdit(driver)}
-                      >
-                        <SquarePen size={16} />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="destructive"
-                        title="Remove"
-                        onClick={() => setDriverToDelete(driver.id)}
-                        disabled={!!driver.truckId}
-                      >
-                        <Trash2 size={16} />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <DriversTable
+        drivers={drivers}
+        trucks={allTrucks || []}
+        onEdit={handleOnEdit}
+        onDelete={setDriverToDelete}
+      />
     </div>
   );
 }
