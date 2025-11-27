@@ -42,14 +42,16 @@ export const RecentLoadsTable = ({ loads }: RecentLoadsTableProps) => {
         ) : (
           loads?.map(load => (
             <TableRow key={load.id}>
-              <TableCell className="font-medium">{load.description}</TableCell>
-              <TableCell>
-                <div className="text-sm">{load.origin.address}</div>
-                <div className="text-xs text-foreground">
+              <TableCell data-header="Description" className="font-medium">
+                {load.description}
+              </TableCell>
+              <TableCell data-header="Route">
+                <div className="text-sm max-sm:mr-1">{load.origin.address}</div>
+                <div className="sm:text-xs text-foreground">
                   to {load.destination.address}
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell data-header="Status">
                 <Badge
                   variant={
                     load.status === LoadStatus.IN_ROUTE
@@ -62,7 +64,7 @@ export const RecentLoadsTable = ({ loads }: RecentLoadsTableProps) => {
                   {loadStatusLabelMap[load.status]}
                 </Badge>
               </TableCell>
-              <TableCell className="text-right">
+              <TableCell data-header="Actions" className="lg:text-right">
                 <Button
                   variant="ghost"
                   size="sm"

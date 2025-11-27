@@ -301,9 +301,11 @@ export default function TrucksPage() {
             ) : (
               trucks?.map(truck => (
                 <TableRow key={truck.id}>
-                  <TableCell className="font-medium">{truck.plate}</TableCell>
-                  <TableCell>{truck.model}</TableCell>
-                  <TableCell>
+                  <TableCell data-header="Plate" className="font-medium">
+                    {truck.plate}
+                  </TableCell>
+                  <TableCell data-header="Model">{truck.model}</TableCell>
+                  <TableCell data-header="Status">
                     <Badge
                       variant={
                         truck.status === TruckStatus.ACTIVE
@@ -314,14 +316,17 @@ export default function TrucksPage() {
                       {truckStatusLabelMap[truck.status]}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell data-header="Driver">
                     {truck.driverName ? (
                       truck.driverName
                     ) : (
-                      <span className="text-muted-foreground">-</span>
+                      <span className="text-foreground">-</span>
                     )}
                   </TableCell>
-                  <TableCell className="space-x-2 text-right">
+                  <TableCell
+                    data-header="Actions"
+                    className="space-x-2 lg:text-right"
+                  >
                     <Button
                       size="icon"
                       variant="ghost"

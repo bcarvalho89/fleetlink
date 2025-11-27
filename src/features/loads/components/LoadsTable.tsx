@@ -28,7 +28,7 @@ export const LoadsTable = ({
   setSelectedLoad,
 }: LoadsTableProps) => {
   return (
-    <div className="rounded-md border border-border">
+    <div className="rounded-md border border-border max-lg:overflow-y-auto max-lg:max-h-[calc(50vh-100px)]">
       <Table>
         <TableHeader>
           <TableRow>
@@ -47,15 +47,17 @@ export const LoadsTable = ({
               )}
               onClick={() => setSelectedLoad(load)}
             >
-              <TableCell>
-                <div className="font-medium">{load.description}</div>
-                <div className="text-xs text-foreground/60 flex gap-0.5 items-center">
-                  {load.origin.address}
-                  <Milestone size={12} />
-                  {load.destination.address}
+              <TableCell data-header="Description">
+                <div className="flex flex-col">
+                  <div className="font-medium">{load.description}</div>
+                  <div className="text-xs text-foreground/60 flex gap-0.5 items-center">
+                    {load.origin.address}
+                    <Milestone size={12} />
+                    {load.destination.address}
+                  </div>
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell data-header="Status">
                 <Select
                   value={load.status}
                   onClick={e => e.stopPropagation()}
@@ -71,7 +73,7 @@ export const LoadsTable = ({
                   ))}
                 </Select>
               </TableCell>
-              <TableCell>
+              <TableCell data-header="Actions">
                 <Button
                   variant="ghost"
                   size="sm"

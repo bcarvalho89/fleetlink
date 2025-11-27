@@ -51,13 +51,18 @@ export const DriversTable = ({
 
               return (
                 <TableRow key={driver.id}>
-                  <TableCell className="font-medium">{driver.name}</TableCell>
-                  <TableCell>{driver.phone}</TableCell>
-                  <TableCell>{driver.cnh}</TableCell>
-                  <TableCell>
+                  <TableCell data-header="Name" className="font-medium">
+                    {driver.name}
+                  </TableCell>
+                  <TableCell data-header="Phone">{driver.phone}</TableCell>
+                  <TableCell data-header="CNH">{driver.cnh}</TableCell>
+                  <TableCell data-header="Truck">
                     {truck ? `${truck.plate} / ${truck.model}` : '-'}
                   </TableCell>
-                  <TableCell className="space-x-2 text-right">
+                  <TableCell
+                    data-header="Actions"
+                    className="space-x-2 lg:text-right"
+                  >
                     <Button
                       size="icon"
                       variant="ghost"

@@ -1,5 +1,5 @@
 import { signOut } from 'firebase/auth';
-import { Activity, Box, LogOut, Menu, TruckIcon, Users } from 'lucide-react';
+import { Activity, Box, LogOut, Menu, TruckIcon, Users, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -49,7 +49,8 @@ export function Sidebar({ onSidebarToogle, isOpen }: SidebarProps) {
           onClick={onSidebarToogle}
           aria-label="Toggle sidebar"
         >
-          <Menu size={24} />
+          <X size={24} className="lg:hidden" />
+          <Menu size={24} className="max-lg:hidden" />
         </Button>
       </div>
       <nav
@@ -92,7 +93,9 @@ export function Sidebar({ onSidebarToogle, isOpen }: SidebarProps) {
         <Button
           onClick={handleLogout}
           variant="destructive"
-          className="mt-4 w-full"
+          className={cn('mt-4 w-full', {
+            // 'max-lg:invisible': !isOpen,
+          })}
           size={isOpen ? 'default' : 'icon'}
         >
           <LogOut className={cn({ 'mr-2': isOpen })} size={16} />

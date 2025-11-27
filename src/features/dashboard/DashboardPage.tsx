@@ -40,7 +40,7 @@ export default function Dashboard() {
         <p className="text-foreground">Overview of your fleet operations.</p>
       </div>
 
-      <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
         <SummaryCard
           description="Currently on the road"
           icon={<MapIcon size={16} className="text-blue-500" />}

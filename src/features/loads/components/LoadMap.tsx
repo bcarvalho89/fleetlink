@@ -10,7 +10,7 @@ interface LoadMapProps {
 
 export const LoadMap = ({ selectedLoad }: LoadMapProps) => {
   return (
-    <div className="w-1/2 bg-muted text-muted-foreground rounded-lg border border-border overflow-hidden relative flex flex-col">
+    <div className="lg:w-1/2 max-lg:h-[40vh] bg-muted text-muted-foreground rounded-lg border border-border overflow-hidden relative flex flex-col">
       {selectedLoad ? (
         <>
           <div className="absolute text-foreground top-0 left-0 right-0 z-10 bg-background/80 p-4 backdrop-blur border-b border-border">

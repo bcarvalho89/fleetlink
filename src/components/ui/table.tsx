@@ -22,7 +22,10 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('[&_tr]:border-b [&_tr:hover]:bg-transparent', className)}
+    className={cn(
+      'hidden sm:table-header-group [&_tr]:border-b [&_tr:hover]:bg-transparent',
+      className,
+    )}
     {...props}
   />
 ));
@@ -46,8 +49,9 @@ const TableRow = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tr
     ref={ref}
+    // Mobile: display as a block (like a card). Desktop: display as a table-row.
     className={cn(
-      'border-b border-border transition-colors hover:bg-muted/10 dark:hover:bg-muted/60 data-[state=selected]:bg-muted',
+      'block sm:table-row border-b border-border transition-colors hover:bg-muted/10 dark:hover:bg-muted/60 data-[state=selected]:bg-muted',
       className,
     )}
     {...props}
@@ -62,13 +66,12 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-12 px-4 text-left align-middle font-medium text-foreground [&:has([role=checkbox])]:pr-0',
+      'hidden sm:table-cell h-12 px-4 text-left align-middle font-medium text-foreground [&:has([role=checkbox])]:pr-0',
       className,
     )}
     {...props}
   />
 ));
-TableHead.displayName = 'TableHead';
 
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
@@ -76,7 +79,21 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('p-4 align-middle [&:has([role=checkbox])]:pr-0', className)}
+    className={cn(
+      'block sm:table-cell p-4 align-middle [&:has([role=checkbox])]:pr-0 ',
+      `
+        sm:before:content-none 
+        before:content-[attr(data-header)] 
+        before:font-semibold 
+        before:inline-block 
+        before:w-24 
+        before:mr-4 
+        before:text-foreground
+        before:opacity-80
+        flex items-center
+      `,
+      className,
+    )}
     {...props}
   />
 ));

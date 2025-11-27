@@ -51,8 +51,8 @@ export default function LoadsPage() {
   };
 
   return (
-    <div className="p-6 h-[calc(100vh-4rem)] flex gap-6">
-      <div className="w-1/2 flex flex-col space-y-6 overflow-y-auto pr-2">
+    <div className="p-6 lg:h-[calc(100vh-4rem)] flex max-lg:flex-col gap-6">
+      <div className="lg:w-1/2 flex flex-col space-y-6 lg:overflow-y-auto pr-2">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold">Loads</h1>
           <Button
