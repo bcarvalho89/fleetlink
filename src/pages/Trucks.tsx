@@ -25,6 +25,7 @@ import { useTrucks, useTruckMutations } from '@/hooks/useTrucks';
 import { storage } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
 import { TruckSchema } from '@/schemas/TruckSchema';
+import { TruckStatus, TruckStatusLabelMap } from '@/types';
 
 type TruckData = yup.InferType<typeof TruckSchema>;
 
@@ -201,8 +202,11 @@ export default function TrucksPage() {
                     <FormLabel>Status</FormLabel>
                     <FormControl>
                       <Select {...field}>
-                        <option value="active">Active</option>
-                        <option value="maintenance">Maintenance</option>
+                        {Object.values(TruckStatus).map(value => (
+                          <option key={value} value={value}>
+                            {TruckStatusLabelMap[value]}
+                          </option>
+                        ))}
                       </Select>
                     </FormControl>
                     <FormMessage />
@@ -297,12 +301,12 @@ export default function TrucksPage() {
                     <span
                       className={cn(
                         'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-                        truck.status === 'active'
+                        truck.status === TruckStatus.ACTIVE
                           ? 'bg-green-100 text-green-800'
                           : 'bg-red-100 text-red-800',
                       )}
                     >
-                      {truck.status}
+                      {TruckStatusLabelMap[truck.status]}
                     </span>
                   </TableCell>
                   <TableCell>
