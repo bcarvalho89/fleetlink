@@ -21,7 +21,6 @@ export const Dialog: React.FC<DialogProps> = ({
   className,
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
-  const lastFocusedElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -35,7 +34,6 @@ export const Dialog: React.FC<DialogProps> = ({
 
       return () => {
         document.removeEventListener('keydown', handleKeyDown);
-        lastFocusedElement.current?.focus();
       };
     }
   }, [isOpen, onClose]);
@@ -45,7 +43,7 @@ export const Dialog: React.FC<DialogProps> = ({
   }
 
   const wrapperClasses = cn(
-    'relative m-4 w-full max-w-lg rounded-lg bg-white p-4 shadow-xl animate-in fade-in-0 zoom-in-95 sm:p-6',
+    'relative m-4 w-full max-w-lg rounded-lg bg-background p-4 shadow-xl animate-in fade-in-0 zoom-in-95 sm:p-6',
     className,
   );
 

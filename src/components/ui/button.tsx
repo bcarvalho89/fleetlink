@@ -16,8 +16,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       destructive:
         'bg-destructive text-destructive-foreground hover:bg-destructive/90',
       outline:
-        'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-      ghost: 'hover:bg-accent hover:text-accent-foreground',
+        'border border-input bg-background hover:bg-accent/10 dark:hover:bg-white/10 hover:text-accent-foreground',
+      ghost: 'hover:bg-accent/20 dark:hover:bg-white/10',
       link: 'text-primary underline-offset-4 hover:underline',
     };
 

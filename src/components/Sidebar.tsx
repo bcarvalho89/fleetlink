@@ -58,8 +58,9 @@ export function Sidebar({ onSidebarToogle, isOpen }: SidebarProps) {
               <Link
                 to={link.href}
                 className={cn(
-                  'block rounded p-2 hover:bg-accent',
-                  location.pathname === link.href && 'bg-accent font-medium',
+                  'block rounded p-2 hover:bg-accent/20 dark:hover:bg-white/10 transition-colors duration-300',
+                  location.pathname === link.href &&
+                    'bg-accent/20 dark:bg-white/10 font-medium',
                 )}
               >
                 {link.label}
