@@ -1,3 +1,3 @@
-export { default as LoadsPage } from './LoadsPage';
+export { LoadsPage } from './Loadable';
 export * from './types/Load';
 export { useLoads } from './hooks/useLoads';

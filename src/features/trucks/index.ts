@@ -1,3 +1,3 @@
-export { default as TrucksPage } from './TrucksPage';
+export { TrucksPage } from './Loadable';
 export * from './types/Truck';
 export { useTrucks, useAvailableTrucks } from './hooks/useTrucks';
