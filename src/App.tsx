@@ -11,6 +11,7 @@ import { DashboardPage } from './features/dashboard';
 import { LoginPage, useAuthStore } from './features/auth';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import { ThemeToggle } from './components/common/ThemeToggle';
+import LoadingIndicator from './components/common/LoadingIndicator';
 
 const router = createBrowserRouter([
   {
@@ -56,7 +57,7 @@ function App() {
   }, [setUser]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingIndicator text="Loading indicator App" />;
   }
 
   return (

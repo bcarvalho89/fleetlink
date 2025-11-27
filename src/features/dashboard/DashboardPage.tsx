@@ -25,11 +25,9 @@ import { cn } from '@/lib/utils';
 export default function Dashboard() {
   const navigate = useNavigate();
 
-  const { data: loads, isLoading: loadsLoading } = useLoads();
-  const { data: trucks, isLoading: trucksLoading } = useTrucks();
-  const { data: drivers, isLoading: driversLoading } = useDrivers();
-
-  const isLoading = loadsLoading || trucksLoading || driversLoading;
+  const { data: loads } = useLoads();
+  const { data: trucks } = useTrucks();
+  const { data: drivers } = useDrivers();
 
   const plannedLoads =
     loads?.filter(l => l.status === LoadStatus.PLANNED).length || 0;
@@ -46,12 +44,6 @@ export default function Dashboard() {
   const recentLoads = loads
     ?.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
     .slice(0, 5);
-
-  if (isLoading) {
-    return (
-      <div className="p-8 text-muted-foreground">Loading dashboard data...</div>
-    );
-  }
 
   const renderCard = ({
     title,
