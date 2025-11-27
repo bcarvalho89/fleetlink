@@ -1,26 +1,42 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { onAuthStateChanged } from 'firebase/auth';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { Mock, vi } from 'vitest';
 
-import ProtectedRoute from './components/layout/ProtectedRoute';
-import { useAuth } from './hooks/useAuth';
+import App from '@/App';
+import ProtectedRoute from '@/components/layout/ProtectedRoute';
+import { useAuth, useAuthStore } from '@/features/auth';
 
-vi.mock('./hooks/useAuth');
+vi.mock('firebase/auth', () => ({
+  onAuthStateChanged: vi.fn(),
+  getAuth: vi.fn(),
+}));
 
 vi.mock('./lib/firebase', () => ({
   auth: {},
   db: {},
 }));
 
-vi.mock('./pages/Dashboard', () => ({
-  default: () => <div>Dashboard</div>,
+vi.mock('@/features/dashboard', () => ({
+  DashboardPage: () => <div>Dashboard</div>,
 }));
-vi.mock('./pages/Login', () => ({ default: () => <div>Login</div> }));
-vi.mock('./pages/NotFound', () => ({
-  default: () => <div>Not Found</div>,
+
+vi.mock('@/features/auth', async importOriginal => {
+  const original = await importOriginal<typeof import('@/features/auth')>();
+  return {
+    ...original,
+    useAuth: vi.fn(),
+    useAuthStore: vi.fn(),
+    LoginPage: () => <div>Login</div>,
+  };
+});
+
+vi.mock('@/features/misc', () => ({
+  NotFoundPage: () => <div>Not Found</div>,
 }));
 
 const mockedUseAuth = useAuth as Mock;
+const mockedUseAuthStore = useAuthStore as unknown as Mock;
 
 const routesConfig = [
   {
@@ -39,6 +55,42 @@ const routesConfig = [
     element: <h1>Login</h1>,
   },
 ];
+
+describe('App Component', () => {
+  let mockSetUser: Mock;
+
+  beforeEach(() => {
+    mockSetUser = vi.fn();
+    mockedUseAuthStore.mockReturnValue({ setUser: mockSetUser });
+    mockedUseAuth.mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('should display loading indicator initially', () => {
+    (onAuthStateChanged as Mock).mockImplementation(() => vi.fn()); // Mock unsubscribe
+    render(<App />);
+    expect(screen.getByLabelText('Loading app')).toBeInTheDocument();
+  });
+
+  it('should render the app after auth state is determined', async () => {
+    const mockUser = { uid: '123', email: 'test@test.com' };
+
+    (onAuthStateChanged as Mock).mockImplementation((_, callback) => {
+      callback(mockUser);
+      return vi.fn();
+    });
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.queryByLabelText('Loading app')).not.toBeInTheDocument();
+      expect(mockSetUser).toHaveBeenCalledWith(mockUser);
+    });
+  });
+});
 
 describe('App Routing', () => {
   afterEach(() => {

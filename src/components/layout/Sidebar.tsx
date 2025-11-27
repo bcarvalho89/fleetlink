@@ -42,7 +42,12 @@ export function Sidebar({ onSidebarToogle, isOpen }: SidebarProps) {
     <aside className="flex h-full flex-col">
       <div className="flex items-center justify-between p-4">
         {isOpen && <h1 className="text-lg font-bold">FleetLink</h1>}
-        <Button variant="ghost" size="icon" onClick={onSidebarToogle}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onSidebarToogle}
+          aria-label="Toggle sidebar"
+        >
           <Menu size={24} />
         </Button>
       </div>

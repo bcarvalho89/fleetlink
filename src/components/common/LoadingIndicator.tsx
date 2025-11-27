@@ -2,7 +2,10 @@ import { Loader2, Truck } from 'lucide-react';
 
 const LoadingIndicator = () => {
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
+    <div
+      className="flex h-screen w-full flex-col items-center justify-center bg-background"
+      aria-label="Loading app"
+    >
       <div className="relative flex items-center justify-center">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="h-24 w-24 rounded-full border-4 border-primary/20"></div>
