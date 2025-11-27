@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '@/components/ui';
+import { Badge, Button } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
@@ -20,7 +20,6 @@ import {
 import { useDrivers } from '@/features/drivers';
 import { LoadStatus, loadStatusLabelMap, useLoads } from '@/features/loads';
 import { useAvailableTrucks } from '@/features/trucks';
-import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -148,19 +147,17 @@ export default function Dashboard() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span
-                          className={cn(
-                            'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-                            load.status === LoadStatus.IN_ROUTE &&
-                              'bg-blue-100 text-blue-800',
-                            load.status === LoadStatus.PLANNED &&
-                              'bg-orange-100 text-orange-800',
-                            load.status === LoadStatus.DELIVERED &&
-                              'bg-green-100 text-green-800',
-                          )}
+                        <Badge
+                          variant={
+                            load.status === LoadStatus.IN_ROUTE
+                              ? 'info'
+                              : load.status === LoadStatus.PLANNED
+                                ? 'warning'
+                                : 'success'
+                          }
                         >
                           {loadStatusLabelMap[load.status]}
-                        </span>
+                        </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <Button

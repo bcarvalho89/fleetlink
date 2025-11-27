@@ -4,7 +4,14 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { Button, Dialog, Input, LoadingButton, Select } from '@/components/ui';
+import {
+  Badge,
+  Button,
+  Dialog,
+  Input,
+  LoadingButton,
+  Select,
+} from '@/components/ui';
 import {
   Form,
   FormControl,
@@ -22,7 +29,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { storage } from '@/lib/firebase';
-import { cn } from '@/lib/utils';
 
 import { useTruckMutations, useTrucks } from './hooks/useTrucks';
 import { TruckSchema } from './schemas/TruckSchema';
@@ -299,16 +305,15 @@ export default function TrucksPage() {
                   <TableCell className="font-medium">{truck.plate}</TableCell>
                   <TableCell>{truck.model}</TableCell>
                   <TableCell>
-                    <span
-                      className={cn(
-                        'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
+                    <Badge
+                      variant={
                         truck.status === TruckStatus.ACTIVE
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800',
-                      )}
+                          ? 'success'
+                          : 'danger'
+                      }
                     >
                       {truckStatusLabelMap[truck.status]}
-                    </span>
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     {truck.driverName ? (
