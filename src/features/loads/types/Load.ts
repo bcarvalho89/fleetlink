@@ -4,7 +4,7 @@ export enum LoadStatus {
   PLANNED = 'planned',
 }
 
-export const LoadStatusLabelMap: Record<LoadStatus, string> = {
+export const loadStatusLabelMap: Record<LoadStatus, string> = {
   [LoadStatus.DELIVERED]: 'Delivered',
   [LoadStatus.IN_ROUTE]: 'In Route',
   [LoadStatus.PLANNED]: 'Planned',

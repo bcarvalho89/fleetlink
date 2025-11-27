@@ -18,10 +18,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useDrivers } from '@/features/drivers';
+import { LoadStatus, loadStatusLabelMap, useLoads } from '@/features/loads';
 import { TruckStatus, useTrucks } from '@/features/trucks';
-import { useLoads } from '@/hooks/useLoads';
 import { cn } from '@/lib/utils';
-import { LoadStatus, LoadStatusLabelMap } from '@/types';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -170,7 +169,7 @@ export default function Dashboard() {
                               'bg-green-100 text-green-800',
                           )}
                         >
-                          {LoadStatusLabelMap[load.status]}
+                          {loadStatusLabelMap[load.status]}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">

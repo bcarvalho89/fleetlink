@@ -9,8 +9,9 @@ import {
 import * as yup from 'yup';
 
 import { db } from '@/lib/firebase';
-import { LoadSchema } from '@/schemas/LoadSchema';
-import { Load, LoadStatus } from '@/types';
+
+import { LoadSchema } from '../schema/LoadSchema';
+import { Load, LoadStatus } from '../types/Load';
 
 const COLLECTION = 'loads';
 

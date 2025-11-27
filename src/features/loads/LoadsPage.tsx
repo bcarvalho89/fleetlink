@@ -24,10 +24,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { TruckStatus, useTrucks } from '@/features/trucks';
-import { useLoads, useLoadMutations } from '@/hooks/useLoads';
 import { cn } from '@/lib/utils';
-import { LoadSchema } from '@/schemas/LoadSchema';
-import { Load, LoadStatus, LoadStatusLabelMap } from '@/types';
+
+import { useLoadMutations, useLoads } from './hooks/useLoads';
+import { LoadSchema } from './schema/LoadSchema';
+import { Load, LoadStatus, loadStatusLabelMap } from './types/Load';
 
 type LoadData = yup.InferType<typeof LoadSchema>;
 
@@ -78,7 +79,7 @@ export default function LoadsPage() {
   const handleStatusChange = async (id: string, newStatus: LoadStatus) => {
     try {
       await updateStatus.mutateAsync({ id, status: newStatus });
-      alert('Load status changed to ' + LoadStatusLabelMap[newStatus]);
+      alert('Load status changed to ' + loadStatusLabelMap[newStatus]);
     } catch (error) {
       alert('Failed to create load.');
       console.error(error);
@@ -258,7 +259,7 @@ export default function LoadsPage() {
                     >
                       {Object.values(LoadStatus).map(value => (
                         <option key={value} value={value}>
-                          {LoadStatusLabelMap[value]}
+                          {loadStatusLabelMap[value]}
                         </option>
                       ))}
                     </Select>
