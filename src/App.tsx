@@ -57,7 +57,14 @@ function App() {
   }, [setUser]);
 
   if (isLoading) {
-    return <LoadingIndicator text="Loading indicator App" />;
+    return (
+      <>
+        <LoadingIndicator />
+        <div className="hidden">
+          <ThemeToggle />
+        </div>
+      </>
+    );
   }
 
   return (
