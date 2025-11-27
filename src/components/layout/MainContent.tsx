@@ -4,11 +4,11 @@ import { cn } from '@/lib/utils';
 
 import { Sidebar } from './Sidebar';
 
-type LayoutProps = {
+type MainContentProps = {
   children: React.ReactNode;
 };
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const MainContent: React.FC<MainContentProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -33,4 +33,4 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-export default Layout;
+export default MainContent;

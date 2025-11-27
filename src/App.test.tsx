@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { Mock, vi } from 'vitest';
 
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/layout/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
 
 vi.mock('./hooks/useAuth');

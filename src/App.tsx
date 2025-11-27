@@ -2,15 +2,15 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import ProtectedRoute from './components/ProtectedRoute';
-import { ThemeToggle } from './components/ThemeToggle';
 import { DriversPage } from './features/drivers';
 import { LoadsPage } from './features/loads';
 import { TrucksPage } from './features/trucks';
 import { auth } from './lib/firebase';
-import NotFound from './pages/NotFound';
+import { NotFoundPage } from './features/misc';
 import { DashboardPage } from './features/dashboard';
 import { LoginPage, useAuthStore } from './features/auth';
+import ProtectedRoute from './components/layout/ProtectedRoute';
+import { ThemeToggle } from './components/common/ThemeToggle';
 
 const router = createBrowserRouter([
   {
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         element: <LoadsPage />,
       },
     ],
-    errorElement: <NotFound />,
+    errorElement: <NotFoundPage />,
   },
   {
     path: '/login',

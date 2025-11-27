@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
-import { MapComponent } from '@/components/Map';
 import { Button, Dialog, Input, LoadingButton, Select } from '@/components/ui';
 import {
   Form,
@@ -29,6 +28,7 @@ import { cn } from '@/lib/utils';
 import { useLoadMutations, useLoads } from './hooks/useLoads';
 import { LoadSchema } from './schema/LoadSchema';
 import { Load, LoadStatus, loadStatusLabelMap } from './types/Load';
+import { MapComponent } from '@/components/common/Map';
 
 type LoadData = yup.InferType<typeof LoadSchema>;
 

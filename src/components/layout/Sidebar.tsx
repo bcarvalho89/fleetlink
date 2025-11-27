@@ -4,9 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { auth } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
-import { useAuthStore } from '@/store/auth';
-
-import { Button } from './ui';
+import { useAuthStore } from '@/features/auth';
+import { Button } from '../ui';
 
 interface SidebarProps {
   onSidebarToogle: () => void;

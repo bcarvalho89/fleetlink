@@ -1,8 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { useAuth } from '@/hooks';
-
-import Layout from './Layout';
+import Layout from './MainContent';
+import { useAuth } from '@/features/auth';
 
 export default function ProtectedRoute() {
   const isAuth = useAuth();
