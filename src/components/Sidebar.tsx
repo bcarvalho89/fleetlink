@@ -1,5 +1,5 @@
 import { signOut } from 'firebase/auth';
-import { LogOut, Menu } from 'lucide-react';
+import { Activity, Box, LogOut, Menu, TruckIcon, Users } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { auth } from '@/lib/firebase';
@@ -14,10 +14,10 @@ interface SidebarProps {
 }
 
 const navigatiomItems = [
-  { href: '/', label: 'Dashboard' },
-  { href: '/drivers', label: 'Drivers' },
-  { href: '/trucks', label: 'Trucks' },
-  { href: '/loads', label: 'Loads' },
+  { href: '/', label: 'Dashboard', icon: Activity },
+  { href: '/drivers', label: 'Drivers', icon: Users },
+  { href: '/trucks', label: 'Trucks', icon: TruckIcon },
+  { href: '/loads', label: 'Loads', icon: Box },
 ];
 
 export function Sidebar({ onSidebarToogle, isOpen }: SidebarProps) {
@@ -52,21 +52,25 @@ export function Sidebar({ onSidebarToogle, isOpen }: SidebarProps) {
           isOpen ? 'opacity-100' : 'opacity-0',
         )}
       >
-        <ul>
-          {navigatiomItems.map(link => (
-            <li key={link.href}>
-              <Link
-                to={link.href}
-                className={cn(
-                  'block rounded p-2 hover:bg-accent/20 dark:hover:bg-white/10 transition-colors duration-300',
-                  location.pathname === link.href &&
-                    'bg-accent/20 dark:bg-white/10 font-medium',
-                )}
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
+        <ul className="space-y-1">
+          {navigatiomItems.map(link => {
+            const Icon = link.icon;
+            return (
+              <li key={link.href}>
+                <Link
+                  to={link.href}
+                  className={cn(
+                    'rounded p-2 hover:bg-accent/20 dark:hover:bg-white/10 transition-colors duration-300 flex gap-2 items-center',
+                    location.pathname === link.href &&
+                      'bg-accent/20 dark:bg-white/10 font-medium',
+                  )}
+                >
+                  <Icon size={16} />
+                  <span>{link.label}</span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
       <div className="mt-auto p-4">
