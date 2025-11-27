@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui';
 import { useAvailableTrucks, useTrucks } from '@/features/trucks';
@@ -64,18 +65,14 @@ export default function DriversPage() {
           id: editingDriverId,
           data: driverData,
         });
-        alert('Driver updated successfully!');
+        toast.success('Driver updated successfully!');
       } else {
         await addDriver.mutateAsync(driverData);
-        alert('Driver created successfully!');
+        toast.success('Driver created successfully!');
       }
       handleClose();
     } catch (error) {
-      console.error(
-        `Failed to ${editingDriverId ? 'update' : 'create'} driver`,
-        error,
-      );
-      alert(`Failed to ${editingDriverId ? 'update' : 'create'} driver.`);
+      toast.error(`Failed to ${editingDriverId ? 'update' : 'create'} driver.`);
     }
   };
 
@@ -89,11 +86,10 @@ export default function DriversPage() {
     if (!driverToDelete) return;
     try {
       await deleteDriver.mutateAsync(driverToDelete);
-      alert('Driver deleted successfully!');
+      toast.success(`Driver deleted successfully!`);
       setDriverToDelete(null);
     } catch (error) {
-      console.error('Failed to delete driver:', error);
-      alert('Failed to delete driver.');
+      toast.error(`Failed delete driver.`);
     }
   };
 

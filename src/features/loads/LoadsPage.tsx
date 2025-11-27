@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui';
 import { useTrucks } from '@/features/trucks';
@@ -33,21 +34,19 @@ export default function LoadsPage() {
   const onSubmit = async (data: LoadData) => {
     try {
       await addLoad.mutateAsync(data);
-      alert('Load created successfully!');
+      toast.success('Load created successfully!');
       handleClose();
     } catch (error) {
-      alert('Failed to create load.');
-      console.error(error);
+      toast.error('Failed to create load.');
     }
   };
 
   const handleStatusChange = async (id: string, newStatus: LoadStatus) => {
     try {
       await updateStatus.mutateAsync({ id, status: newStatus });
-      alert('Load status changed to ' + loadStatusLabelMap[newStatus]);
+      toast.success(`Load status changed to ${loadStatusLabelMap[newStatus]}`);
     } catch (error) {
-      alert('Failed to create load.');
-      console.error(error);
+      toast.error('Failed to update the load status.');
     }
   };
 

@@ -1,6 +1,7 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { auth } from '@/lib/firebase';
 
@@ -32,11 +33,10 @@ const Login = () => {
       login(userPayload);
       navigate('/');
     } catch (error) {
-      // TODO Create a toast component for feedbacks
       if (error instanceof Error) {
-        alert(error.message);
+        toast.error(error.message);
       } else {
-        alert('An unexpected error occurred during login.');
+        toast.error('An unexpected error occurred during login.');
       }
     }
   };

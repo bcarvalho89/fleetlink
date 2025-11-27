@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import LoadingIndicator from './components/common/LoadingIndicator';
 import { ThemeToggle } from './components/common/ThemeToggle';
 import ProtectedRoute from './components/layout/ProtectedRoute';
+import { Toaster } from './components/ui/sonner';
 import { LoginPage, useAuthStore } from './features/auth';
 import { DashboardPage } from './features/dashboard';
 import { DriversPage } from './features/drivers';
@@ -69,6 +70,7 @@ function App() {
 
   return (
     <>
+      <Toaster />
       <RouterProvider router={router} />
       <ThemeToggle />
     </>

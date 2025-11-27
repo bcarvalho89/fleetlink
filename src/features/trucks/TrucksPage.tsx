@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Plus, SquarePen, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import * as yup from 'yup';
 
 import {
@@ -63,10 +64,9 @@ export default function TrucksPage() {
       setUploading(true);
       const url = await storage(file);
 
-      console.log('URL:', url);
       form.setValue('docUrl', url);
     } catch (err) {
-      alert('Upload failed');
+      toast.error('Error to upload the document.');
     } finally {
       setUploading(false);
     }
@@ -76,18 +76,18 @@ export default function TrucksPage() {
     try {
       if (editingTruckId) {
         await updateTruck.mutateAsync({ id: editingTruckId, data });
-        alert('Truck updated successfully!');
+        toast.success('Truck updated successfully!');
       } else {
         await addTruck.mutateAsync({
           driverId: null,
           ...data,
         });
-        alert('Truck added successfully!');
+        toast.success('Truck added successfully!');
       }
       handleClose();
     } catch (error) {
       console.error(error);
-      alert(`Failed to ${editingTruckId ? 'update' : 'add'} truck.`);
+      toast.error(`Failed to ${editingTruckId ? 'update' : 'add'} truck.`);
     }
   };
 
@@ -96,11 +96,10 @@ export default function TrucksPage() {
 
     try {
       await deleteTruck.mutateAsync(truckToDelete);
-      alert('Truck deleted successfully!');
+      toast.success('Truck deleted successfully!');
       setTruckToDelete(null);
     } catch (error) {
-      console.error('Failed to delete truck:', error);
-      alert('Failed to delete truck.');
+      toast.error('Failed to delete truck.');
     }
   };
 

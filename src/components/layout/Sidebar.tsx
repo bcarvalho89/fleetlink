@@ -1,6 +1,7 @@
 import { signOut } from 'firebase/auth';
 import { Activity, Box, LogOut, Menu, TruckIcon, Users } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { useAuthStore } from '@/features/auth';
 import { auth } from '@/lib/firebase';
@@ -31,9 +32,9 @@ export function Sidebar({ onSidebarToogle, isOpen }: SidebarProps) {
       navigate('/login');
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message);
+        toast.error(error.message);
       } else {
-        alert('An unexpected error occurred during logout.');
+        toast.error('An unexpected error occurred during logout.');
       }
     }
   };
