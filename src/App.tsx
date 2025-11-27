@@ -2,16 +2,16 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import LoadingIndicator from './components/common/LoadingIndicator';
+import { ThemeToggle } from './components/common/ThemeToggle';
+import ProtectedRoute from './components/layout/ProtectedRoute';
+import { LoginPage, useAuthStore } from './features/auth';
+import { DashboardPage } from './features/dashboard';
 import { DriversPage } from './features/drivers';
 import { LoadsPage } from './features/loads';
+import { NotFoundPage } from './features/misc';
 import { TrucksPage } from './features/trucks';
 import { auth } from './lib/firebase';
-import { NotFoundPage } from './features/misc';
-import { DashboardPage } from './features/dashboard';
-import { LoginPage, useAuthStore } from './features/auth';
-import ProtectedRoute from './components/layout/ProtectedRoute';
-import { ThemeToggle } from './components/common/ThemeToggle';
-import LoadingIndicator from './components/common/LoadingIndicator';
 
 const router = createBrowserRouter([
   {

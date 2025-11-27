@@ -15,10 +15,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { auth } from '@/lib/firebase';
+
+import { useAuth } from './hooks/useAuth';
 import { LoginSchema } from './schema/LoginSchema';
 import { useAuthStore } from './store/authStore';
 import { User } from './types/User';
-import { useAuth } from './hooks/useAuth';
 
 type LoginData = yup.InferType<typeof LoginSchema>;
 

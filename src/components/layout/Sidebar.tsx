@@ -2,9 +2,10 @@ import { signOut } from 'firebase/auth';
 import { Activity, Box, LogOut, Menu, TruckIcon, Users } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { useAuthStore } from '@/features/auth';
 import { auth } from '@/lib/firebase';
 import { cn } from '@/lib/utils';
-import { useAuthStore } from '@/features/auth';
+
 import { Button } from '../ui';
 
 interface SidebarProps {
