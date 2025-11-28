@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { signOut } from 'firebase/auth';
 import { MemoryRouter } from 'react-router-dom';
-import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
+import { toast } from 'sonner';
+import { vi, describe, it, expect, beforeEach, Mock, afterEach } from 'vitest';
 
 import { useAuthStore } from '@/features/auth';
 
@@ -17,6 +18,12 @@ vi.mock('@/lib/firebase', () => ({ auth: {} }));
 
 vi.mock('@/features/auth', () => ({
   useAuthStore: vi.fn(),
+}));
+
+vi.mock('sonner', () => ({
+  toast: {
+    error: vi.fn(),
+  },
 }));
 
 const mockNavigate = vi.fn();
@@ -42,6 +49,10 @@ describe('Sidebar', () => {
       user: { email: 'test@example.com' },
       logout: mockLogout,
     });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should render navigation links, email and logout button when open', () => {
@@ -96,19 +107,16 @@ describe('Sidebar', () => {
 
     await user.click(screen.getByRole('button', { name: /logout/i }));
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(signOut).toHaveBeenCalled();
       expect(mockLogout).toHaveBeenCalled();
       expect(mockNavigate).toHaveBeenCalledWith('/login');
     });
   });
 
-  it('should show an alert if logout fails', async () => {
+  it('should show a toast message if logout fails', async () => {
     const errorMessage = 'Logout failed';
-
     (signOut as Mock).mockRejectedValue(new Error(errorMessage));
-
-    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
 
     render(
       <MemoryRouter>
@@ -118,13 +126,11 @@ describe('Sidebar', () => {
 
     await user.click(screen.getByRole('button', { name: /logout/i }));
 
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(signOut).toHaveBeenCalled();
       expect(mockLogout).not.toHaveBeenCalled();
       expect(mockNavigate).not.toHaveBeenCalled();
-      expect(alertSpy).toHaveBeenCalledWith(errorMessage);
+      expect(toast.error).toHaveBeenCalledWith(errorMessage);
     });
-
-    alertSpy.mockRestore();
   });
 });

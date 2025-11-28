@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import { Mock, vi } from 'vitest';
+import { Mock, vi, afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import App from '@/App';
 import ProtectedRoute from '@/components/layout/ProtectedRoute';
@@ -61,6 +61,20 @@ describe('App Component', () => {
 
   beforeEach(() => {
     mockSetUser = vi.fn();
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
     mockedUseAuthStore.mockReturnValue({ setUser: mockSetUser });
     mockedUseAuth.mockReturnValue(true);
   });
