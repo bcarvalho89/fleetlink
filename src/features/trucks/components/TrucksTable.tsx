@@ -35,7 +35,10 @@ export const TrucksTable = ({ trucks, onDelete, onEdit }: TrucksTableProps) => {
         <TableBody>
           {trucks?.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center h-24">
+              <TableCell
+                colSpan={5}
+                className="text-center h-24 text-foreground"
+              >
                 No trucks found.
               </TableCell>
             </TableRow>

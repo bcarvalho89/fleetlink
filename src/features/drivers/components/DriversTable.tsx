@@ -41,7 +41,10 @@ export const DriversTable = ({
         <TableBody>
           {drivers?.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center h-24">
+              <TableCell
+                colSpan={5}
+                className="text-center h-24 text-foreground"
+              >
                 No drivers found.
               </TableCell>
             </TableRow>

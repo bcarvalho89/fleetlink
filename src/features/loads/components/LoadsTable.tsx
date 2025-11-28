@@ -34,56 +34,67 @@ export const LoadsTable = ({
           <TableRow>
             <TableHead>Desc</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loads?.map(load => (
-            <TableRow
-              key={load.id}
-              className={cn(
-                'cursor-pointer',
-                selectedLoad?.id === load.id && 'bg-muted/30',
-              )}
-              onClick={() => setSelectedLoad(load)}
-            >
-              <TableCell data-header="Description">
-                <div className="flex flex-col">
-                  <div className="font-medium">{load.description}</div>
-                  <div className="text-xs text-foreground/60 flex gap-0.5 items-center">
-                    {load.origin.address}
-                    <Milestone size={12} />
-                    {load.destination.address}
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell data-header="Status">
-                <Select
-                  value={load.status}
-                  onClick={e => e.stopPropagation()}
-                  onChange={e =>
-                    handleStatusChange(load.id, e.target.value as LoadStatus)
-                  }
-                  className="h-8 text-xs"
-                >
-                  {Object.values(LoadStatus).map(value => (
-                    <option key={value} value={value}>
-                      {loadStatusLabelMap[value]}
-                    </option>
-                  ))}
-                </Select>
-              </TableCell>
-              <TableCell data-header="Actions">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedLoad(load)}
-                >
-                  View Map
-                </Button>
+          {loads?.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                className="text-center h-24 text-foreground"
+              >
+                No loads found.
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            loads?.map(load => (
+              <TableRow
+                key={load.id}
+                className={cn(
+                  'cursor-pointer',
+                  selectedLoad?.id === load.id && 'bg-muted/30',
+                )}
+                onClick={() => setSelectedLoad(load)}
+              >
+                <TableCell data-header="Description">
+                  <div className="flex flex-col">
+                    <div className="font-medium">{load.description}</div>
+                    <div className="text-xs text-foreground/60 flex gap-0.5 items-center">
+                      {load.origin.address}
+                      <Milestone size={12} />
+                      {load.destination.address}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell data-header="Status">
+                  <Select
+                    value={load.status}
+                    onClick={e => e.stopPropagation()}
+                    onChange={e =>
+                      handleStatusChange(load.id, e.target.value as LoadStatus)
+                    }
+                    className="h-8 text-xs"
+                  >
+                    {Object.values(LoadStatus).map(value => (
+                      <option key={value} value={value}>
+                        {loadStatusLabelMap[value]}
+                      </option>
+                    ))}
+                  </Select>
+                </TableCell>
+                <TableCell data-header="Actions" className="lg:text-right">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedLoad(load)}
+                  >
+                    View Map
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>

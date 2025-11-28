@@ -32,10 +32,7 @@ export const RecentLoadsTable = ({ loads }: RecentLoadsTableProps) => {
       <TableBody>
         {loads?.length === 0 ? (
           <TableRow>
-            <TableCell
-              colSpan={4}
-              className="text-center h-24 text-muted-foreground"
-            >
+            <TableCell colSpan={4} className="text-center h-24 text-foreground">
               No loads created yet.
             </TableCell>
           </TableRow>
