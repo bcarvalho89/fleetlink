@@ -12,6 +12,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    clearMocks: true,
     setupFiles: ['./src/vitest.setup.ts'],
   },
   resolve: {

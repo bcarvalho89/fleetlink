@@ -1,18 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { signOut } from 'firebase/auth';
 import { MemoryRouter } from 'react-router-dom';
 import { toast } from 'sonner';
 import { vi, describe, it, expect, beforeEach, Mock, afterEach } from 'vitest';
 
 import { useAuthStore } from '@/features/auth';
+import { render, screen, waitFor } from '@/test/test-utils';
 
 import { Sidebar } from './Sidebar';
-
-vi.mock('firebase/auth', () => ({
-  signOut: vi.fn(),
-}));
 
 vi.mock('@/lib/firebase', () => ({ auth: {} }));
 
@@ -39,12 +34,10 @@ vi.mock('react-router-dom', async () => {
 describe('Sidebar', () => {
   const mockLogout = vi.fn();
   const mockOnSidebarToggle = vi.fn();
-  let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
     (signOut as Mock).mockClear();
     vi.clearAllMocks();
-    user = userEvent.setup();
     (useAuthStore as any).mockReturnValue({
       user: { email: 'test@example.com' },
       logout: mockLogout,
@@ -75,7 +68,7 @@ describe('Sidebar', () => {
   });
 
   it('should call onSidebarToggle when toggle button is clicked', async () => {
-    render(
+    const { user } = render(
       <MemoryRouter>
         <Sidebar isOpen={true} onSidebarToogle={mockOnSidebarToggle} />
       </MemoryRouter>,
@@ -99,7 +92,7 @@ describe('Sidebar', () => {
   it('should handle logout successfully', async () => {
     (signOut as Mock).mockResolvedValue(true);
 
-    render(
+    const { user } = render(
       <MemoryRouter>
         <Sidebar isOpen={true} onSidebarToogle={mockOnSidebarToggle} />
       </MemoryRouter>,
@@ -118,7 +111,7 @@ describe('Sidebar', () => {
     const errorMessage = 'Logout failed';
     (signOut as Mock).mockRejectedValue(new Error(errorMessage));
 
-    render(
+    const { user } = render(
       <MemoryRouter>
         <Sidebar isOpen={true} onSidebarToogle={mockOnSidebarToggle} />
       </MemoryRouter>,

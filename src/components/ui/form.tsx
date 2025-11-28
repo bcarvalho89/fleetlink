@@ -97,22 +97,20 @@ function FormLabel({
   );
 }
 
-function FormControl({ ...props }: React.ComponentProps<'div'>) {
+function FormControl(props: React.ComponentPropsWithoutRef<'div'>) {
   const { error, formItemId, formDescriptionId, formMessageId } =
     useFormField();
 
-  return (
-    <div
-      id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
-      aria-invalid={!!error}
-      {...props}
-    />
-  );
+  const { children, ...rest } = props;
+
+  return React.cloneElement(children as React.ReactElement, {
+    id: formItemId,
+    'aria-describedby': !error
+      ? `${formDescriptionId}`
+      : `${formDescriptionId} ${formMessageId}`,
+    'aria-invalid': !!error,
+    ...rest,
+  });
 }
 
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {

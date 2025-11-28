@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { vi, describe, it, expect } from 'vitest';
 
 import { useAuth } from '@/features/auth';
+import { render, screen } from '@/test/test-utils';
 
 import ProtectedRoute from './ProtectedRoute';
 

@@ -1,7 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 
 import { useThemeStore } from '@/features/theme';
+import { fireEvent, render, screen } from '@/test/test-utils';
 
 import { ThemeToggle } from './ThemeToggle';
 
