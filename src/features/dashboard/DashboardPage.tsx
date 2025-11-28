@@ -83,7 +83,7 @@ export default function Dashboard() {
             <CardTitle>Recent Loads</CardTitle>
           </CardHeader>
           <CardContent>
-            <RecentLoadsTable loads={recentLoads} />
+            <RecentLoadsTable loads={recentLoads || []} />
           </CardContent>
         </Card>
       </div>
