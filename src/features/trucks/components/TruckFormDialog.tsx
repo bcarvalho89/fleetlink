@@ -130,18 +130,22 @@ export const TruckFormDialog = ({
               render={() => (
                 <FormItem>
                   <FormLabel>Document (PDF/JPG)</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={onFileUpload}
-                    />
-                    {isUploading && (
-                      <span className="text-sm text-muted-foreground animate-pulse">
-                        Uploading...
-                      </span>
-                    )}
-                  </FormControl>
+                  <div>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={onFileUpload}
+                        value={undefined}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                  {isUploading && (
+                    <span className="text-sm text-muted-foreground animate-pulse mt-1">
+                      Uploading...
+                    </span>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
