@@ -1,18 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   collection,
+  deleteDoc,
   doc,
-  getDocs,
+  getDoc,
   addDoc,
   updateDoc,
-  deleteDoc,
-  getDoc,
   query,
   where,
   onSnapshot,
 } from 'firebase/firestore';
 import { useEffect } from 'react';
 
+import { Driver } from '@/features/drivers/types/Driver';
 import { db } from '@/lib/firebase';
 
 import { Truck, TruckStatus } from '../types/Truck';
@@ -20,27 +20,46 @@ import { Truck, TruckStatus } from '../types/Truck';
 const COLLECTION = 'trucks';
 
 export function useTrucks() {
-  return useQuery({
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const trucksQuery = query(collection(db, COLLECTION));
+    const driversQuery = query(collection(db, 'drivers'));
+
+    const unsubTrucks = onSnapshot(trucksQuery, trucksSnapshot => {
+      const trucks = trucksSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Truck[];
+
+      const unsubDrivers = onSnapshot(driversQuery, driversSnapshot => {
+        const driversMap = new Map<string, string>();
+        driversSnapshot.forEach(doc => {
+          const driver = doc.data() as Omit<Driver, 'id'>;
+          driversMap.set(doc.id, driver.name);
+        });
+
+        const trucksWithDriverNames = trucks.map(truck => ({
+          ...truck,
+          driverName: truck.driverId
+            ? driversMap.get(truck.driverId)
+            : undefined,
+        }));
+
+        queryClient.setQueryData(['trucks'], trucksWithDriverNames);
+      });
+
+      return () => unsubDrivers();
+    });
+
+    return () => unsubTrucks();
+  }, [queryClient]);
+
+  return useQuery<Truck[]>({
     queryKey: ['trucks'],
-    queryFn: async () => {
-      const driversSnapshot = await getDocs(collection(db, 'drivers'));
-      const driversMap = new Map<string, string>();
-      driversSnapshot.forEach(doc => {
-        driversMap.set(doc.id, doc.data().name);
-      });
-
-      const trucksSnapshot = await getDocs(collection(db, COLLECTION));
-
-      return trucksSnapshot.docs.map(doc => {
-        const truckData = { id: doc.id, ...doc.data() } as Truck;
-
-        truckData.driverName = truckData.driverId
-          ? driversMap.get(truckData.driverId)
-          : undefined;
-
-        return truckData;
-      });
-    },
+    queryFn: () => [],
+    enabled: false,
+    initialData: [],
   });
 }
 

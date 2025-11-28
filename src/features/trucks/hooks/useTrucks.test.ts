@@ -1,13 +1,16 @@
 import { waitFor } from '@testing-library/react';
 import {
-  addDoc,
-  deleteDoc,
-  getDoc,
-  getDocs,
+  DocumentData,
+  QuerySnapshot,
+  QueryDocumentSnapshot,
   onSnapshot,
+  addDoc,
   updateDoc,
+  getDoc,
+  deleteDoc,
 } from 'firebase/firestore';
-import { Mock, afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { Mock } from 'vitest';
 
 import { renderHook } from '@/test/test-utils';
 
@@ -15,42 +18,68 @@ import { TruckStatus } from '../types/Truck';
 
 import { useAvailableTrucks, useTruckMutations, useTrucks } from './useTrucks';
 
+type SnapshotCallback = (
+  snapshot: Partial<QuerySnapshot<DocumentData, DocumentData>>,
+) => void;
+
+type Unsubscribe = () => void;
+
+type Docs = QueryDocumentSnapshot<DocumentData, DocumentData>[];
+
 describe('useTrucks', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should fetch trucks and map driver names', async () => {
-    (getDocs as Mock)
-      .mockResolvedValueOnce({
-        forEach: vi.fn(callback =>
-          [{ id: 'driver1', data: () => ({ name: 'John Doe' }) }].forEach(doc =>
-            callback(doc),
-          ),
-        ),
-        docs: [{ id: 'driver1', data: () => ({ name: 'John Doe' }) }],
-      })
-      .mockResolvedValueOnce({
-        docs: [
-          {
-            id: 'truck1',
-            data: () => ({ model: 'Volvo', driverId: 'driver1' }),
-          },
-        ],
-      });
+  it('should fetch trucks and map driver names on snapshot update', async () => {
+    const mockDrivers = [{ id: 'driver1', name: 'John Doe' }];
+    const mockTrucks = [{ id: 'truck1', model: 'Volvo', driverId: 'driver1' }];
+
+    const mockDriverDocs = mockDrivers.map(d => ({
+      id: d.id,
+      data: () => ({ name: d.name }),
+    }));
+    let driversCallback: (
+      snapshot: Partial<QuerySnapshot<DocumentData>>,
+    ) => void = vi.fn();
+    let callCount = 0;
+
+    (onSnapshot as Mock).mockImplementation(
+      (_query, callback: SnapshotCallback): Unsubscribe => {
+        callCount++;
+
+        if (callCount === 1) {
+          const trucksCallback = callback;
+
+          trucksCallback({
+            docs: mockTrucks.map(t => ({
+              id: t.id,
+              data: () => t,
+            })) as unknown as Docs,
+          });
+        } else if (callCount === 2) {
+          driversCallback = callback;
+          driversCallback({
+            docs: mockDriverDocs.map(
+              d => d as unknown as QueryDocumentSnapshot<DocumentData>,
+            ),
+            forEach: (cb: (doc: QueryDocumentSnapshot<DocumentData>) => void) =>
+              mockDriverDocs.forEach(d =>
+                cb(d as unknown as QueryDocumentSnapshot<DocumentData>),
+              ),
+          });
+        }
+
+        return vi.fn();
+      },
+    );
 
     const { result } = renderHook(() => useTrucks());
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true));
-
-    expect(result.current.data).toEqual([
-      {
-        id: 'truck1',
-        model: 'Volvo',
-        driverId: 'driver1',
-        driverName: 'John Doe',
-      },
-    ]);
+    await waitFor(() => {
+      expect(result.current.data).toHaveLength(1);
+      expect(result.current.data?.[0].driverName).toBe('John Doe');
+    });
   });
 });
 
