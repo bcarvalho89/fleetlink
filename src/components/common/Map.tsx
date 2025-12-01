@@ -1,6 +1,8 @@
 import mapboxgl from 'mapbox-gl';
 import React, { useEffect, useRef, useState } from 'react';
+
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { cn } from '@/lib/utils';
 
 interface MapProps {
   origin?: { lat: number; lng: number };
@@ -118,15 +120,36 @@ export const MapComponent: React.FC<MapProps> = ({ origin, destination }) => {
     };
   }, [origin, destination]);
 
+  const baseInfoBoxClass =
+    'absolute left-4 max-w-3xs bg-background/90 backdrop-blur shadow text-sm z-10 p-2 rounded';
+
   return (
     <div className="relative w-full h-full rounded-lg overflow-hidden border border-border">
       <div ref={mapContainer} className="w-full h-full" />
-      {(routeDistance || routeDuration) && (
-        <div className="absolute bottom-4 left-4 bg-background/90 text-foreground backdrop-blur p-2 rounded shadow text-sm font-semibold z-10">
-          {routeDistance && <p>Distance: {routeDistance}</p>}
-          {routeDuration && <p>Duration: {routeDuration}</p>}
-        </div>
-      )}
+
+      <div className={cn(baseInfoBoxClass, 'bottom-20 text-destructive')}>
+        <p>
+          <strong>Attention:</strong> We are randomizing the addresses
+          coordinates for demo purposes. You can see more{' '}
+          <a
+            href="https://github.com/bcarvalho89/fleetlink/blob/master/src/features/loads/hooks/useLoads.ts#L46-L55"
+            className="underline underline-offset-4"
+          >
+            here
+          </a>
+          .
+        </p>
+      </div>
+
+      <div
+        className={cn(
+          baseInfoBoxClass,
+          'bottom-4 text-foreground p-2 font-semibold',
+        )}
+      >
+        {routeDistance && <p>Distance: {routeDistance}</p>}
+        {routeDuration && <p>Duration: {routeDuration}</p>}
+      </div>
     </div>
   );
 };
